@@ -1,0 +1,57 @@
+create database project_manager;
+use project_manager;
+
+Create table Project(
+id int auto_increment primary key,
+project_name varchar(30) not null unique,
+createdDate varchar(30) not null,
+created_by int not null, 
+description varchar(254)
+);
+
+create table Users(
+id int auto_increment primary key, 
+username varchar(30) not null unique, 
+password varbinary(255) not null,
+salt varbinary(16) not null
+);
+
+create table Task(
+id int auto_increment primary key,
+task_name varchar(30)not null unique,
+description varchar(254) not null,
+status varchar(50),
+createdDate date not null,
+endDate date,
+project_id int not null,
+created_by int not null,
+constraint fk_task_project foreign key (project_id) references Project(id) on delete cascade on update cascade
+);
+
+create table User_Task_Assigment(
+user_id int,
+ id int,
+ assigment_date date,
+ constraint fk_user foreign key (user_id) references Users(id) on delete cascade on update cascade,
+ constraint fk_task foreign key (id) references Task(id) on delete cascade on update cascade
+ );
+ 
+ create table User_Project_assignment(
+ user_id int,
+ id int,
+ assigment_date date,
+ constraint fk_user_p foreign key (user_id) references Users(id) on delete cascade on update cascade,
+ constraint fk_project foreign key (id) references Project(id) on delete cascade on update cascade);
+
+
+
+
+
+
+
+  
+
+
+
+
+
