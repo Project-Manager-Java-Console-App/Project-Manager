@@ -59,7 +59,7 @@ public class ProjectDAO extends AbstractFuncProjectTask<Project,Integer> {
 
     @Override
     protected String getAllByAddedUser() {
-        return "Select id from "+ connectingTableName()+" where user_id = ?";
+        return "Select id from User_Project_assignment where user_id = ?";
     }
 
     @Override
@@ -69,17 +69,17 @@ public class ProjectDAO extends AbstractFuncProjectTask<Project,Integer> {
 
     @Override
     protected String addUserQuery(int project_id, int user_id) {
-        return "Insert into "+connectingTableName()+"(id,user_id,assigment_date) Values(?,?,?)";
+        return "Insert into User_Project_assignment(id,user_id,assigment_date) Values(?,?,?)";
     }
 
     @Override
     protected String getAddedUsers() {
-        return "Select user_id from "+ connectingTableName()+" where id =?";
+        return "Select user_id from User_Project_assignment where id =?";
     }
 
     @Override
     protected String insertSQL() {
-        return "Insert into "+tableName()+"(project_name, createdDate, description, created_by) Values (?,?,?,?)";
+        return "Insert into project(project_name, createdDate, description, created_by) Values (?,?,?,?)";
     }
 
     @Override
@@ -93,7 +93,7 @@ public class ProjectDAO extends AbstractFuncProjectTask<Project,Integer> {
         return "Select * from project where project_name = ?";
     }
 
-    //baca
+
     public List<Task> findTasksByProjectId(Integer project_id) throws SQLException {
         String query = "Select * from Task where project_id=?";
         try (Connection conn = getConnection();

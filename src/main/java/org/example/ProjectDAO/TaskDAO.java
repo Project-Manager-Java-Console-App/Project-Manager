@@ -66,7 +66,7 @@ public class TaskDAO extends AbstractFuncProjectTask<Task,Integer> {
 
     @Override
     protected String getAllByAddedUser() {
-        return "Select id from "+ connectingTableName()+" where user_id = ?";
+        return "Select id from User_Task_Assigment where user_id = ?";
     }
 
     @Override
@@ -76,22 +76,22 @@ public class TaskDAO extends AbstractFuncProjectTask<Task,Integer> {
 
     @Override
     protected String addUserQuery(int task_id, int user_id) {
-        return "Insert into "+ connectingTableName()+"(id,user_id,assigment_date) values(?,?,?)";
+        return "Insert into User_Task_Assigment(id,user_id,assigment_date) values(?,?,?)";
     }
 
     @Override
     protected String getAddedUsers() {
-        return "Select user_id from "+ connectingTableName() +" where id = ?";
+        return "Select user_id from User_Task_Assigment where id = ?";
     }
 
     @Override
     protected String insertSQL() {
-        return "Insert into "+ tableName()+ "(task_name, description, status, createdDate, endDate, project_id, created_by) values(?,?,?,?,?,?,?)";
+        return "Insert into Task(task_name, description, status, createdDate, endDate, project_id, created_by) values(?,?,?,?,?,?,?)";
     }
 
     @Override
     protected String updateSQL() {
-        return "Update "+tableName()+" set task_name=? ,description=? ,status =? where id=?";
+        return "Update Task set task_name=? ,description=? ,status =? where id=?";
     }
 
     @Override

@@ -43,7 +43,7 @@ public class UsersDAO extends AbstractCRUDOperations<Users,Integer> {
 
     @Override
     protected String updateSQL() {
-        return "Update "+tableName()+" set username = ? where id = ?";
+        return "Update users set username = ? where id = ?";
     }
 
     @Override
