@@ -45,8 +45,6 @@ public class ProjectDAO extends AbstractFuncProjectTask<Project,Integer> {
         ps.setInt(3,updatedObjectId);
     }
 
-
-
     @Override
     protected Integer extractGeneratedKey(ResultSet rs) throws SQLException {
        return rs.getInt(1);
@@ -84,7 +82,6 @@ public class ProjectDAO extends AbstractFuncProjectTask<Project,Integer> {
 
     @Override
     protected String updateSQL() {
-
         return "Update project set project_name=?, description=? where id=?";
     }
 
@@ -92,7 +89,6 @@ public class ProjectDAO extends AbstractFuncProjectTask<Project,Integer> {
     protected String findByNameSQL()  {
         return "Select * from project where project_name = ?";
     }
-
 
     public List<Task> findTasksByProjectId(Integer project_id) throws SQLException {
         String query = "Select * from Task where project_id=?";

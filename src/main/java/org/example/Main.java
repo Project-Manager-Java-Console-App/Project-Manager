@@ -160,10 +160,9 @@ public class Main {
                             break;
                         }
                         case 2:{
-
+                            sc.nextLine();
                             System.out.println("Please enter your new project name: ");
                             String newName = sc.nextLine();
-                            sc.nextLine();
                             System.out.println("please enter your new project description: ");
                             String newDescription = sc.nextLine();
 
@@ -185,6 +184,7 @@ public class Main {
                             break;
                         }
                         case 4:{
+                            sc.nextLine();
                             System.out.println("Adding existing task to a "+projects.getName()+" project!");
                             System.out.println("Please enter task name that you want to add: ");
                             String taskName = sc.nextLine();
@@ -202,6 +202,7 @@ public class Main {
                             break;
                         }
                         case 5:{
+                            sc.nextLine();
                             System.out.println("Adding a user to a "+projects.getName()+" project");
                             System.out.println("Please enter username of user you wish to add: ");
                             String username = sc.nextLine();
@@ -219,6 +220,7 @@ public class Main {
                             break;
                         }
                         case 6:{
+                            sc.nextLine();
                             System.out.println("Removing a user from a "+projects.getName()+" project!");
                             System.out.println("Please enter username: ");
                             String newUsername = sc.nextLine();
@@ -256,6 +258,7 @@ public class Main {
                             break;
                         }
                         case 9:{
+                            sc.nextLine();
                             System.out.println("Project "+projects.getName()+"is going to be deleted!");
                             System.out.println("Do you want to delete this project?(Y/N)");
                             String delete = sc.nextLine();
