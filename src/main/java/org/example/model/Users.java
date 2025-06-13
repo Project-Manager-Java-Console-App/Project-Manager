@@ -3,6 +3,7 @@ package org.example.model;
 
 import org.example.Auth.PasswordUtils;
 
+import java.sql.SQLException;
 import java.util.Base64;
 
 public class Users{
@@ -18,7 +19,11 @@ public class Users{
         this.salt = salt;
     }
 
-    public static Users registerNew( String username,String passwordHash){
+    public static Users registerNew(String username,String passwordHash) throws SQLException {
+        if(username == null || passwordHash == null){
+            throw new SQLException("Username or password cannot be null!!");
+        }
+
         byte[] saltBytes = PasswordUtils.generateSalt();
         byte[] hashBytes = PasswordUtils.hash(passwordHash.toCharArray(),saltBytes);
 
