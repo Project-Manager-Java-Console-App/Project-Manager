@@ -5,28 +5,32 @@ import java.time.LocalDate;
 public class Project {
 
     private int id;
-    private String name;
-    private String description;
-    private LocalDate createdDate;
-    private int createdByUserId;
+    private final String name;
+    private final String description;
+    private final LocalDate createdDate;
+    private final int createdByUserId;
 
-    public Project(){
-        createdDate = LocalDate.now();
+    private Project( String name, String description, int createdByUserId) {
+        this.name = name;
+        this.description = description;
+        this.createdDate = LocalDate.now();
+        this.createdByUserId = createdByUserId;
+
+    }
+
+    public static Project create(String name, String description,  int createdByUserId) {
+        if(name == null || description == null || createdByUserId == 0)
+            throw new IllegalArgumentException("Name, description and createdByUserId are required!");
+
+        return new Project(name, description, createdByUserId);
     }
 
     public LocalDate getCreatedDate() {
         return createdDate;
     }
-    public void setCreatedDate(LocalDate createdDate) {
-        this.createdDate = createdDate;
-    }
 
     public int getCreatedByUserId() {
         return createdByUserId;
-    }
-
-    public void setCreatedByUserId(int createdBy) {
-        this.createdByUserId = createdBy;
     }
 
     public int getId() {
@@ -42,15 +46,10 @@ public class Project {
     }
 
     public void setId(int id) {
+        if(this.id != 0)
+            throw  new IllegalStateException("Project id has already been created");
+
         this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public String toString() {
