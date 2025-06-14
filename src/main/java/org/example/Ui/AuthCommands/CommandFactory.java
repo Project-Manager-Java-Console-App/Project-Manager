@@ -1,0 +1,17 @@
+package org.example.Ui.AuthCommands;
+
+import org.example.Service.UserService;
+import org.example.Ui.Command;
+
+import java.util.Scanner;
+
+public class CommandFactory {
+    public static Command getCommand(int choice, UserService userService, Scanner scanner){
+        return switch (choice){
+            case 1 -> new RegisterCommand(userService, scanner);
+            case 2 -> new LoginCommand(userService, scanner);
+            case 3 -> new ExitCommand();
+            default -> () ->System.out.println("Invalid choice");
+        };
+    }
+}

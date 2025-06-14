@@ -1,0 +1,11 @@
+package org.example.Ui.AuthCommands;
+
+import org.example.Ui.Command;
+
+public class ExitCommand implements Command {
+    @Override
+    public void execute() {
+        System.out.println("Exiting...");
+     System.exit(0);
+    }
+}

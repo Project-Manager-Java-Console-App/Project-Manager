@@ -23,7 +23,7 @@ public class UserService {
 
     }
 
-    public Users loginUser(String username, String password) throws UsernameAlreadyExistsException, SQLException {
+    public Users loginUser(String username, String password) throws SQLException {
         Users user = userRepository.findByName(username);
         if(user==null){
             throw new IllegalArgumentException("User not found");

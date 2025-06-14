@@ -2,11 +2,13 @@ package org.example.Service;
 
 import org.example.Exceptions.UserIdNotFound;
 import org.example.Exceptions.UsernameAlreadyExistsException;
+import org.example.Repository.MySqlProjectRepository;
 import org.example.Repository.ProjectRepository;
 import org.example.model.Project;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Locale;
 
 public class ProjectService {
     private final ProjectRepository projectRepository;
@@ -15,11 +17,17 @@ public class ProjectService {
         this.projectRepository = projectRepository;
     }
 
-    public Project createProject(String name, String description,  int createdByUserId){
+    public Project createProject(String name, String description, int createdByUserId){
         if(name == null || description == null || createdByUserId == 0){
-            throw new IllegalArgumentException("Name, description, createdByUserId are required");
+            throw new IllegalArgumentException("Name, description, createdByUserId, createdDate are required");
         }
-        return projectRepository.save(Project.create(name, description, createdByUserId));
+        return projectRepository.save(Project.create(name,description,createdByUserId));
+    }
+    public Project updateProject(String name, String description, int projectId) throws SQLException {
+        if(name == null || description == null || projectId == 0){
+            throw new IllegalArgumentException("Name, description, projectId are required");
+        }
+        return projectRepository.update(Project.create(name, description, projectId));
     }
 
     public Project findProjectByName(String name) throws UsernameAlreadyExistsException {

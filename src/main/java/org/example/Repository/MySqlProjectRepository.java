@@ -20,21 +20,24 @@ public class MySqlProjectRepository
 
     @Override
     public Project save(Project project) {
-        String sql = project.getId() == 0
-                ? "INSERT INTO projects(name) VALUES(?)"
-                : "UPDATE projects SET project_name = ? WHERE id = ?";
+        String sql = "INSERT INTO project(project_name,description,created_by,createdDate) VALUES(?,?,?,?)";
+
         try (PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, project.getName());
-            if (project.getId() != 0) stmt.setInt(2, project.getId());
+            stmt.setString(2, project.getDescription());
+            stmt.setInt(3, project.getCreatedByUserId());
+            stmt.setDate(4,Date.valueOf(project.getCreatedDate()));
             stmt.executeUpdate();
-            if (project.getId() == 0) {
-                ResultSet rs = stmt.getGeneratedKeys();
-                if (rs.next()) project.setId(rs.getInt(1));
+
+            try(ResultSet rs = stmt.getGeneratedKeys()) {
+                if(rs.next()) {
+                        project.setId(rs.getInt(1));
+                }
             }
         } catch (SQLException e) {
             throw new ProjectIdNotFound();
         }
-        return null;
+        return project;
     }
 
 
@@ -47,6 +50,23 @@ public class MySqlProjectRepository
         } catch (SQLException e) {
             throw new ProjectIdNotFound();
         }
+    }
+
+    @Override
+    public Project update(Project project) throws SQLException {
+        String sql = "UPDATE project SET project_name = ?, description = ? WHERE id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, project.getName());
+            stmt.setString(2, project.getDescription());
+            stmt.setInt(3, project.getId());
+            int rows = stmt.executeUpdate();
+            if(rows == 0) {
+                throw new ProjectIdNotFound();
+            }
+        }catch (SQLException e){
+            throw new ProjectIdNotFound();
+        }
+        return project;
     }
 
     @Override

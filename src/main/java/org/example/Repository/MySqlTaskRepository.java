@@ -20,36 +20,24 @@ public class MySqlTaskRepository implements TaskRepository {
 
     @Override
     public Task save(Task task) throws TaskIdNotFound {
-        boolean isNew = task.getId() == 0;
-        String query =isNew
-                ? "Insert into Task(task_name, description, status, createdDate, project_id, created_by) values(?,?,?,?,?,?)"
-                :"Update Task set task_name=? ,description=? ,status =? where id=?";
+        String query = "Insert into Task(task_name, description, status, createdDate, project_id, created_by) values(?,?,?,?,?,?)";
 
         try (PreparedStatement stmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
             stmt.setString(1, task.getName());
             stmt.setString(2, task.getDescription());
             stmt.setString(3, task.getStatus().name());
+            stmt.setObject(4, task.getStartDate());
+            stmt.setInt(5, task.getProject_id());
+            stmt.setInt(6, task.getCreatedBy());
+            stmt.executeUpdate();
 
-            if(isNew) {
-                stmt.setObject(4, task.getStartDate());
-                stmt.setInt(5, task.getProject_id());
-                stmt.setInt(6, task.getCreatedBy());
-            }else {
-                stmt.setInt(4, task.getId());
-            }
-            int effected = stmt.executeUpdate();
-            if (effected == 0) {
-                throw new TaskIdNotFound();
-            }
-            if(isNew) {
-                try (ResultSet rs = stmt.getGeneratedKeys()) {
-                    if (rs.next()) {
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
                         task.setId(rs.getInt(1));
-                    }
                 }
             }
             return task;
-
         } catch (SQLException e) {
             throw new TaskIdNotFound();
         }
@@ -64,6 +52,24 @@ public class MySqlTaskRepository implements TaskRepository {
         }catch (SQLException e) {
             throw new TaskIdNotFound();
         }
+    }
+
+    @Override
+    public Task update(Task task) throws SQLException {
+        String sql = "Update Task set task_name=? ,description=? ,status =? where id=?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, task.getName());
+            stmt.setString(2, task.getDescription());
+            stmt.setString(3, task.getStatus().name());
+            stmt.setInt(4, task.getId());
+            int effected = stmt.executeUpdate();
+            if (effected == 0) {
+                throw new TaskIdNotFound();
+            }
+        }catch (SQLException e){
+            throw new TaskIdNotFound();
+        }
+        return task;
     }
 
     @Override

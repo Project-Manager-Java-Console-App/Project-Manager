@@ -13,6 +13,7 @@ public interface TaskRepository {
 
     Task save(Task task) throws TaskIdNotFound;
     boolean delete(Task task) throws SQLException;
+    Task update(Task task) throws SQLException;
     Task findByName(String name) throws UsernameAlreadyExistsException;
     List<Task> getAllTasksCreatedByUser(Integer userId) throws SQLException;
     Task findById(Integer id) throws SQLException;
