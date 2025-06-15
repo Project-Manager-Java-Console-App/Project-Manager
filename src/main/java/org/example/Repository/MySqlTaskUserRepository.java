@@ -1,14 +1,17 @@
 package org.example.Repository;
 
 import org.example.Exceptions.TaskIdNotFound;
+import org.example.Exceptions.UserIdNotFound;
 import org.example.model.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
-import static org.example.Repository.AssigmentHelper.getIntegers;
-import static org.example.Repository.AssigmentHelper.getUsers;
+
+
 
 public class MySqlTaskUserRepository implements TaskUserRepository {
     private final Connection conn;
@@ -18,10 +21,18 @@ public class MySqlTaskUserRepository implements TaskUserRepository {
     }
 
     @Override
-    public List<Users> getUsersInTask(Integer taskId) throws SQLException {
-        String query = "SELECT * FROM user_task_assigment WHERE id = ?";
+    public List<Integer> getUsersInTask(Integer taskId) {
+        String query = "SELECT user_id FROM user_task_assigment WHERE id = ?";
         try(PreparedStatement stmt = conn.prepareStatement(query)){
-            return getUsers(taskId, stmt);
+            stmt.setInt(1, taskId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Integer> users = new ArrayList<>();
+                while (rs.next()) {
+                    int id = rs.getInt("user_id");
+                    users.add(id);
+                }
+                return users;
+            }
         }catch (SQLException e) {
             throw new TaskIdNotFound();
         }
@@ -55,8 +66,20 @@ public class MySqlTaskUserRepository implements TaskUserRepository {
     }
 
     @Override
-    public List<Integer> getAllTasksAssignedToUser(Integer userId) throws SQLException {
-        String query = "SELECT * FROM user_task_assigment WHERE user_id = ?";
-        return getIntegers(userId, query, conn);
+    public List<Integer> getAllTasksAssignedToUser(Integer userId)  {
+        String query = "SELECT id FROM user_task_assigment WHERE user_id = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Integer> ids= new ArrayList<>();
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    ids.add(id);
+                }
+                return ids;
+            }
+        }catch (SQLException e){
+            throw new UserIdNotFound();
+        }
     }
 }

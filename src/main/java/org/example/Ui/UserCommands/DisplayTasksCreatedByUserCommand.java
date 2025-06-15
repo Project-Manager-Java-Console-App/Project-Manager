@@ -1,18 +1,19 @@
 package org.example.Ui.UserCommands;
 
 import org.example.Exceptions.UserIdNotFound;
-import org.example.Service.TaskUserService;
+import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
+import org.example.model.Task;
 import org.example.model.Users;
 
 import java.util.List;
 
 public class DisplayTasksCreatedByUserCommand implements Command {
-    private final TaskUserService taskUserService;
+    private final TaskService taskService;
 
-    public DisplayTasksCreatedByUserCommand(TaskUserService taskUserService) {
-        this.taskUserService = taskUserService;
+    public DisplayTasksCreatedByUserCommand(TaskService taskService) {
+        this.taskService = taskService;
     }
 
     @Override
@@ -26,12 +27,12 @@ public class DisplayTasksCreatedByUserCommand implements Command {
 
         System.out.println("Tasks added to: ");
         try{
-            List<Integer> task_ids = taskUserService.getAllTaskAssignedToUser(user.getId());
-            if (task_ids.isEmpty()){
+            List<Task> task = taskService.getAllTasksCreatedByUser(user.getId());
+            if (task.isEmpty()){
                 System.out.println("No tasks assigned to user");
             }else {
-                for (Integer task_id : task_ids){
-                    System.out.println(task_id);
+                for (Task tasks : task){
+                    System.out.println(tasks);
                 }
             }
 

@@ -1,6 +1,6 @@
 package org.example.Ui.UserCommands;
 
-import org.example.Service.TaskService;
+import org.example.Service.TaskUserService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Task;
@@ -9,9 +9,10 @@ import org.example.model.Users;
 import java.util.List;
 
 public class DisplayTaskUserAdded implements Command {
-    private final TaskService taskService;
-    public DisplayTaskUserAdded(TaskService taskService) {
-        this.taskService = taskService;
+    private final TaskUserService taskUserService;
+
+    public DisplayTaskUserAdded(TaskUserService taskUserService) {
+        this.taskUserService = taskUserService;
     }
 
     @Override
@@ -25,13 +26,13 @@ public class DisplayTaskUserAdded implements Command {
 
         System.out.println("Assigned to task: ");
         try{
-            List<Task> tasks = taskService.getAllTasksCreatedByUser(user.getId());
+            List<Integer> tasks = taskUserService.getAllTaskAssignedToUser(user.getId());
             if(tasks.isEmpty()){
                 System.out.println("No tasks assigned to user");
             }
             else{
-                for(Task task : tasks){
-                    System.out.println(task);
+                for(Integer ids : tasks){
+                    System.out.println(ids);
                 }
             }
         }catch (Exception e){

@@ -2,15 +2,15 @@ package org.example.Repository;
 
 import org.example.Exceptions.ProjectIdNotFound;
 import org.example.Exceptions.UserIdNotFound;
-import org.example.model.Users;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
-import static org.example.Repository.AssigmentHelper.getIntegers;
-import static org.example.Repository.AssigmentHelper.getUsers;
 
 public class MySqlProjectUserRepository implements ProjectUserRepository {
     private final Connection conn;
@@ -19,10 +19,18 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
         this.conn = connection;
     }
     @Override
-    public List<Users> getUsersInProject(Integer projectId) throws ProjectIdNotFound {
-        String query = "SELECT * FROM user_project_assignment WHERE id = ?";
+    public List<Integer> getUsersInProject(Integer projectId) throws ProjectIdNotFound {
+        String query = "SELECT user_id FROM user_project_assignment WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)){
-            return getUsers(projectId, stmt);
+            stmt.setInt(1, projectId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Integer> users = new ArrayList<>();
+                while (rs.next()) {
+                    int id = rs.getInt("user_id");
+                    users.add(id);
+                }
+                return users;
+            }
         }catch (SQLException e){
             throw new ProjectIdNotFound();
         }
@@ -58,9 +66,38 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
     }
 
     @Override
-    public List<Integer> getAllProjectsAssignedToUser(Integer userId) throws UserIdNotFound {
-        String query = "SELECT * FROM user_project_assignment WHERE user_id = ?";
-        return getIntegers(userId, query, conn);
+    public List<Integer> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound {
+        String query = "SELECT id FROM project WHERE created_by = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Integer> ids= new ArrayList<>();
+                while (rs.next()) {
+                    int id = rs.getInt(1);
+                    ids.add(id);
+                }
+                return ids;
+            }
+        }catch (SQLException e){
+            throw new UserIdNotFound();
+        }
+    }
 
+    @Override
+    public List<Integer> getAllProjectsWhereUserIsAdded(Integer userId) throws UserIdNotFound {
+        String query = "SELECT id FROM user_project_assignment WHERE user_id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(query)){
+            stmt.setInt(1, userId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                List<Integer> users = new ArrayList<>();
+                while (rs.next()) {
+                    int id = rs.getInt("user_id");
+                    users.add(id);
+                }
+                return users;
+            }
+        }catch (SQLException e){
+            throw new ProjectIdNotFound();
+        }
     }
 }

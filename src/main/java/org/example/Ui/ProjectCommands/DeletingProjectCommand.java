@@ -18,6 +18,7 @@ public class DeletingProjectCommand implements Command {
     }
     @Override
     public void execute() {
+        scanner.nextLine();
         Project project = SessionManager.getCurrentProject();
         if (project==null){
             System.err.println("Project is required");

@@ -14,7 +14,7 @@ public class TaskUserService {
         this.taskUserRepository = taskUserRepository;
     }
 
-    public List<Users> getUsersInTask(int taskId) throws SQLException {
+    public List<Integer> getUsersInTask(int taskId) throws SQLException {
         if (taskId < 1) {
             throw new SQLException("Invalid task id");
         }

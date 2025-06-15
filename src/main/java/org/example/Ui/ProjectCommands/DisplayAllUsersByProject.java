@@ -1,11 +1,9 @@
 package org.example.Ui.ProjectCommands;
 
-import org.example.Repository.ProjectUserRepository;
 import org.example.Service.ProjectUserService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
-import org.example.model.Users;
 
 import java.util.List;
 
@@ -26,9 +24,10 @@ public class DisplayAllUsersByProject implements Command {
         System.out.println("Displaying all users assigned to project: "+project.getName());
 
         try{
-            List<Users> users = projectUserService.getUsersAssignedToProject(project.getId());
-            for (Users user : users) {
-                System.out.println(user);
+            List<Integer> users = projectUserService.getUsersAssignedToProject(project.getId());
+            System.out.println("Users ids: ");
+            for (Integer user_id : users) {
+                System.out.println(user_id);
             }
         }catch (Exception e){
             System.err.println("Failed to display all users assigned to project: "+project.getName());

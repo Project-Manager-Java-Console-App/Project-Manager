@@ -16,16 +16,17 @@ public class LoginCommand implements Command {
         this.userService = userService;
         this.scanner = scanner;
     }
+
     @Override
     public void execute() {
         scanner.nextLine();
-        System.out.print("Username: ");
+        System.out.print("Username:");
         String username = scanner.nextLine();
-        System.out.print("Password: ");
+        System.out.print("Password:");
         String password = scanner.nextLine();
 
         try{
-            Users user = userService.loginUser(username,password);
+            Users user = userService.loginUser(username,password.toCharArray());
             if(user == null){
                 System.out.println("Invalid username or password");
             }

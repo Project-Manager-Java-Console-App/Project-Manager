@@ -26,9 +26,9 @@ public class DisplayAllProjectsUserAddedCommand implements Command {
 
         System.out.println("Projects added to: ");
         try {
-            List<Integer> project_id = projectUserService.getAllProjectsAssignedToUser(user.getId());
+            List<Integer> project_id = projectUserService.getAllProjectsWhereUserIsAdded(user.getId());
             if(project_id.isEmpty()){
-                System.out.println("No projects assigned to user: " + user.getUsername());
+                System.out.println("No projects assigns user: " + user.getUsername());
             }else {
                 for (Integer id : project_id) {
                     System.out.println(id);

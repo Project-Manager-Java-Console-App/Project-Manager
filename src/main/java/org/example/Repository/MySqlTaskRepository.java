@@ -62,7 +62,7 @@ public class MySqlTaskRepository implements TaskRepository {
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1,name);
             stmt.setString(2, description);
-            stmt.setString(3,Status.valueOf(status.name()).toString() );
+            stmt.setString(3,status.name());
             stmt.setInt(4, taskId);
             return stmt.executeUpdate() > 0;
         }catch (SQLException e){

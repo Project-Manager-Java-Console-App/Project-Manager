@@ -47,7 +47,7 @@ public class Project {
 
     public void setId(int id) {
         if(this.id != 0)
-            throw  new IllegalStateException("Project id has already been created");
+            throw  new IllegalArgumentException("Project id has already been created");
 
         this.id = id;
     }

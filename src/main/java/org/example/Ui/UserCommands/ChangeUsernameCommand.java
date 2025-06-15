@@ -34,11 +34,9 @@ public class ChangeUsernameCommand implements Command {
 
         try{
             boolean updated = userService.updateUser(username, users.getId());
-            if (!updated) {
-                System.out.println("Failed to change username");
-            }
+            System.out.println("User " + username + " has been updated"+ updated);
         }catch (Exception e) {
-            System.out.println("Failed to change username");
+            System.err.println("Failed to change username");
         }
     }
 }

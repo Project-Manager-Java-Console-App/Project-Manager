@@ -7,18 +7,18 @@ import org.example.Ui.DisplayChoiceMenu;
 import org.example.Ui.MainCommandBlocks.AfterLoginCommands;
 import org.example.Ui.MainCommandBlocks.AuthCommandFactory;
 import org.example.Ui.MainCommandBlocks.FuncCommands;
+import org.example.dataBase.Database;
 import org.example.dataBase.DatabaseUtils;
 import org.example.model.SessionManager;
-
 import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args)  {
+
         try {
-            DatabaseUtils database = DatabaseUtils.getInstance();
-            Connection connection = database.getConnection();
+            Database factory; factory = new DatabaseUtils();
+            Connection connection = factory.getConnection();
             ProjectRepository projectRepository = new MySqlProjectRepository(connection);
             ProjectUserRepository projectUserRepository = new MySqlProjectUserRepository(connection);
             TaskRepository taskRepository = new MySqlTaskRepository(connection);
@@ -62,10 +62,9 @@ public class Main {
                     command.execute();
                 }
             }
+
         }catch (Exception e) {
-            System.err.println("Failed to connect to the database");
-        }finally {
-            DatabaseUtils.closeConnection();
+            System.err.println(e.getMessage());
         }
     }
 }

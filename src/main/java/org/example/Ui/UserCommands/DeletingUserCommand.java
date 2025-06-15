@@ -40,6 +40,7 @@ public class DeletingUserCommand implements Command {
                 }
             }else if (answer.equals("N")) {
                 System.out.println("Deleting process is rejected");
+                SessionManager.logout();
             }
         }catch (Exception e) {
             throw new UserIdNotFound();

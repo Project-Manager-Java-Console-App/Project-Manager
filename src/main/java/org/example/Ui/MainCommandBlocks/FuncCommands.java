@@ -46,8 +46,8 @@ public class FuncCommands {
         commands.put(22,new FindByIdUserCommand(userService,scanner));
         commands.put(23,new DisplayAllProjectsCreatedByUser(projectUserService));
         commands.put(24,new DisplayAllProjectsUserAddedCommand(projectUserService));
-        commands.put(25,new DisplayTasksCreatedByUserCommand(taskUserService));
-        commands.put(26,new DisplayTaskUserAdded(taskService));
+        commands.put(25,new DisplayTasksCreatedByUserCommand(taskService));
+        commands.put(26,new DisplayTaskUserAdded(taskUserService));
         commands.put(27,new DisplayUserProfile());
         commands.put(28,new DeletingUserCommand(userService,scanner));
         commands.put(29,new LogOutCommand());

@@ -4,9 +4,7 @@ import org.example.Auth.PasswordUtils;
 import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Repository.UserRepository;
 import org.example.model.Users;
-
 import java.sql.SQLException;
-import java.util.Base64;
 
 public class UserService {
     private final UserRepository userRepository;
@@ -23,16 +21,16 @@ public class UserService {
 
     }
 
-    public Users loginUser(String username, String password) throws SQLException {
-        Users user = userRepository.findByName(username);
+    public Users loginUser(String username, char[] password) throws SQLException {
+        Users user = userRepository.authenticate(username, password);
         if(user==null){
             throw new IllegalArgumentException("User not found");
         }
 
-        byte[] salt = Base64.getDecoder().decode(user.getSalt());
-        byte[] expectedHash = Base64.getDecoder().decode(user.getPasswordHash());
+        byte[] salt = user.getSalt();
+        byte[] expectedHash = user.getPasswordHash();
 
-        byte[] inputHash = PasswordUtils.hash(password.toCharArray(), salt);
+        byte[] inputHash = PasswordUtils.hash(password, salt);
 
         if (!PasswordUtils.slowEquals(expectedHash, inputHash)) {
             throw new IllegalArgumentException("Invalid username or password");
@@ -41,11 +39,11 @@ public class UserService {
     }
 
     public boolean updateUser(String username,int user_id) throws SQLException{
-        Users user = userRepository.findByName(username);
+        Users user = userRepository.findById(user_id);
         if(user==null){
             throw new IllegalArgumentException("User not found");
         }
-        return userRepository.update(user,user_id);
+        return userRepository.update(username,user_id);
     }
 
     public boolean deleteUser(Integer id) throws SQLException{

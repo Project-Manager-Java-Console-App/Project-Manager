@@ -24,10 +24,11 @@ public class DisplayAllProjectsCreatedByUser implements Command {
         System.out.println("Displaying all projects created by user: " + users);
 
         try{
-            List<Integer> project_ids = projectUserService.getAllProjectsAssignedToUser(users.getId());
+            List<Integer> project_ids = projectUserService.getAllProjectsCreatedByUser(users.getId());
             if (project_ids.isEmpty()) {
                 System.out.println("No projects assigned to user: " + users);
             }else {
+                System.out.println("Projects ids: ");
                 for (Integer project_id : project_ids) {
                     System.out.println(project_id);
                 }

@@ -4,7 +4,6 @@ import org.example.Service.TaskUserService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Task;
-import org.example.model.Users;
 
 import java.util.List;
 
@@ -25,11 +24,11 @@ public class DisplayUsersAddedToTaskCommand implements Command {
         System.out.println("Displaying users added to "+ task.getName());
 
         try{
-            List<Users> users = taskUserService.getUsersInTask(task.getId());
+            List<Integer> users = taskUserService.getUsersInTask(task.getId());
             if(users.isEmpty()){
                 System.out.println("No users added to the task");
             }
-            for (Users user : users) {
+            for (Integer user : users) {
                 System.out.println(user);
             }
         }catch (Exception e){
