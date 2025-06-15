@@ -1,15 +1,12 @@
 package org.example.Service;
 
 import org.example.Exceptions.ProjectNotFound;
-import org.example.Exceptions.UserIdNotFound;
 import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Repository.ProjectRepository;
 import org.example.Repository.TaskRepository;
 import org.example.model.Project;
 import org.example.model.SessionManager;
-
 import java.sql.SQLException;
-import java.util.List;
 
 
 public class ProjectService {
@@ -65,12 +62,6 @@ public class ProjectService {
         return projectRepository.delete(project);
     }
 
-    public List<Project> getAllProjectsCreatedByUserId(int userId) throws UserIdNotFound {
-        if(userId == 0){
-            throw new IllegalArgumentException("UserId is required");
-        }
-        return projectRepository.getAllProjectsCreatedByUser(userId);
-    }
 
     public void addTaskToProject(int projectId, Integer taskId) throws SQLException{
         if(projectId == 0||taskId == 0){

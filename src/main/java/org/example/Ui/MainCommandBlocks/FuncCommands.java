@@ -7,15 +7,13 @@ import org.example.Ui.Command;
 import org.example.Ui.ProjectCommands.*;
 import org.example.Ui.TaskCommands.*;
 import org.example.Ui.UserCommands.*;
-import org.example.model.SessionManager;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 public class FuncCommands {
 
-    private Map<Integer,Command> commands = new HashMap<>();
+    private final Map<Integer,Command> commands = new HashMap<>();
 
     public FuncCommands(
             ProjectService projectService,
@@ -23,7 +21,6 @@ public class FuncCommands {
             UserService userService,
             ProjectUserService projectUserService,
             TaskUserService taskUserService,
-            SessionManager sessionManager,
             Scanner scanner) {
         commands.put(1,new CreateProjectCommand(projectService,scanner));
         commands.put(2,new UpdateProjectCommand(projectService,scanner));

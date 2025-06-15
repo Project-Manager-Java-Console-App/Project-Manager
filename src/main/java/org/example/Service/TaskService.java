@@ -7,7 +7,7 @@ import org.example.model.Task;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Scanner;
+
 
 public class TaskService {
 
@@ -17,7 +17,7 @@ public class TaskService {
         this.taskRepository = taskRepository;
     }
 
-    public Task createTask(String name, int project_id, String description, Status status , LocalDate startDate, int createdBy) throws SQLException {
+    public Task createTask(String name, int project_id, String description, Status status , LocalDate startDate, int createdBy) {
         if(name== null || description == null || status == null|| startDate == null || createdBy == 0||project_id == 0) {
             throw new IllegalArgumentException("Name, description, status, startDate, createdBy, project_id are required");
         }

@@ -1,6 +1,7 @@
 package org.example.Ui.MainCommandBlocks;
 
 import org.example.Service.ProjectService;
+import org.example.Ui.AuthCommands.ExitCommand;
 import org.example.Ui.AuthCommands.LogOutCommand;
 import org.example.Ui.Command;
 import org.example.Ui.ProjectCommands.CreateProjectCommand;
@@ -15,6 +16,7 @@ public class AfterLoginCommands {
            case 1 -> new CreateProjectCommand(projectService,scanner);
            case 2 -> new FindByNameProject(projectService,scanner);
            case 3 -> new LogOutCommand();
+           case 4 -> new ExitCommand();
            default -> () ->System.out.println("Invalid choice");
        };
    }

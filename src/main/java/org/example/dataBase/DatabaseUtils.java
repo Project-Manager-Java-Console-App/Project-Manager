@@ -6,8 +6,11 @@ import java.sql.SQLException;
 
 public class DatabaseUtils {
 
+    private static final String url = "jdbc:mysql://localhost:3306/project_manager";
+    private static final String password = "P020373p";
+    private static final String user = "root";
     private static DatabaseUtils instance;
-    private final Connection conn;
+    private static Connection conn;
 
     private DatabaseUtils() throws SQLException {
         try{
@@ -16,13 +19,10 @@ public class DatabaseUtils {
             throw new ExceptionInInitializerError("JDBC driver not found");
         }
 
-        String url = "jdbc:mysql://localhost:3306/project_manager";
-        String password = "P020373p";
-        String user = "root";
         conn = DriverManager.getConnection(url, user, password);
     }
 
-    public static synchronized DatabaseUtils getInstance() throws SQLException {
+    public static DatabaseUtils getInstance() throws SQLException {
         if (instance == null) {
             instance = new DatabaseUtils();
         }
@@ -31,5 +31,10 @@ public class DatabaseUtils {
 
     public  Connection getConnection()  {
         return conn;
+    }
+    public static void closeConnection()throws SQLException  {
+        if(conn != null&& conn.isClosed()){
+            conn.close();
+        }
     }
 }

@@ -1,15 +1,9 @@
 package org.example.Repository;
 
 import org.example.Exceptions.ProjectIdNotFound;
-import org.example.Exceptions.TaskIdNotFound;
-import org.example.Exceptions.UserIdNotFound;
 import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.model.Project;
-
-
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MySqlProjectRepository
         implements ProjectRepository {
@@ -92,30 +86,6 @@ public class MySqlProjectRepository
     }
 
     @Override
-    public List<Project> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound  {
-        String query = "SELECT * FROM project WHERE created_by = ?";
-        try(PreparedStatement stmt = conn.prepareStatement(query)){
-            stmt.setInt(1, userId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                List<Project> list = new ArrayList<>();
-                while (rs.next()) {
-                    int id = rs.getInt("id");
-                    String name = rs.getString("project_name");
-                    String description = rs.getString("description");
-                    int createdByUserId = rs.getInt("created_by");
-                    Project project = Project.create(name, description, createdByUserId);
-                    project.setId(id);
-                    list.add(project);
-                }
-                return list;
-            }
-        }
-        catch (SQLException e){
-           throw new UserIdNotFound();
-        }
-    }
-
-    @Override
     public Project findById(Integer id) {
         String query = "SELECT * FROM project WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(query)){
@@ -133,11 +103,4 @@ public class MySqlProjectRepository
             throw new ProjectIdNotFound();
         }
     }
-
-
 }
-
-
-
-
-
