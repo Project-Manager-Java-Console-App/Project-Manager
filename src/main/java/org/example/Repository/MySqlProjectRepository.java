@@ -1,6 +1,7 @@
 package org.example.Repository;
 
 import org.example.Exceptions.ProjectIdNotFound;
+import org.example.Exceptions.TaskIdNotFound;
 import org.example.Exceptions.UserIdNotFound;
 import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.model.Project;
@@ -53,12 +54,12 @@ public class MySqlProjectRepository
     }
 
     @Override
-    public Project update(Project project) throws SQLException {
+    public Project update(Project project, int id) throws SQLException {
         String sql = "UPDATE project SET project_name = ?, description = ? WHERE id = ?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1, project.getName());
             stmt.setString(2, project.getDescription());
-            stmt.setInt(3, project.getId());
+            stmt.setInt(3, id);
             int rows = stmt.executeUpdate();
             if(rows == 0) {
                 throw new ProjectIdNotFound();
@@ -132,4 +133,11 @@ public class MySqlProjectRepository
             throw new ProjectIdNotFound();
         }
     }
+
+
 }
+
+
+
+
+

@@ -7,6 +7,7 @@ import org.example.model.Task;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Scanner;
 
 public class TaskService {
 
@@ -65,4 +66,16 @@ public class TaskService {
         }
         return taskRepository.findTasksByProjectId(projectId);
     }
+
+    public void updateTask(String name,String description, Status status,int id) throws SQLException{
+        if(name == null||description==null||id == 0){
+            throw new IllegalArgumentException("name,description, id is required");
+        }
+        boolean updated= taskRepository.update(id,name,description,status);
+        if (!updated) {
+            throw new SQLException("Could not update task");
+        }
+    }
+
+
 }

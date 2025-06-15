@@ -23,6 +23,10 @@ public class CreateProjectCommand implements Command {
         String projectName = scanner.nextLine();
         System.out.print("Enter project description: ");
         String projectDescription = scanner.nextLine();
+        if(projectName.isEmpty() || projectDescription.isEmpty()){
+            System.err.println("Project name or description is empty");
+            return;
+        }
 
         try{
             int userId = SessionManager.getCurrentUser().getId();

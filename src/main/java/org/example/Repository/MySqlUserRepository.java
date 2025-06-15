@@ -48,11 +48,11 @@ public class MySqlUserRepository implements UserRepository {
     }
 
     @Override
-    public boolean update(Users user) throws SQLException {
+    public boolean update(Users user,int user_id) throws SQLException {
         String sql = "Update users set username=? where id=?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
             ps.setString(1, user.getUsername());
-            ps.setInt(2, user.getId());
+            ps.setInt(2, user_id);
             return ps.executeUpdate() > 0;
         }catch (SQLException e){
             throw new SQLException("Error while updating user: ", e);

@@ -5,7 +5,7 @@ import org.example.Ui.Command;
 
 import java.util.Scanner;
 
-public class CommandFactory {
+public class AuthCommandFactory {
     public static Command getCommand(int choice, UserService userService, Scanner scanner){
         return switch (choice){
             case 1 -> new RegisterCommand(userService, scanner);

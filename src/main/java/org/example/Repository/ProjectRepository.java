@@ -11,7 +11,7 @@ public interface ProjectRepository {
 
     Project save(Project project);
     boolean delete(Project project) throws SQLException;
-    Project update(Project project) throws SQLException;
+    Project update(Project project,int id) throws SQLException;
     Project findByName(String name) throws UsernameAlreadyExistsException;
     List<Project> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound;
     Project findById(Integer id) throws SQLException;

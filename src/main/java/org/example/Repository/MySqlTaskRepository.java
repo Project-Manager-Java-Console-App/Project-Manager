@@ -54,22 +54,21 @@ public class MySqlTaskRepository implements TaskRepository {
         }
     }
 
+
+
     @Override
-    public Task update(Task task) throws SQLException {
+    public boolean update(int taskId, String name, String description, Status status) throws SQLException {
         String sql = "Update Task set task_name=? ,description=? ,status =? where id=?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setString(1, task.getName());
-            stmt.setString(2, task.getDescription());
-            stmt.setString(3, task.getStatus().name());
-            stmt.setInt(4, task.getId());
-            int effected = stmt.executeUpdate();
-            if (effected == 0) {
-                throw new TaskIdNotFound();
-            }
+            stmt.setString(1,name);
+            stmt.setString(2, description);
+            stmt.setString(3,Status.valueOf(status.name()).toString() );
+            stmt.setInt(4, taskId);
+            return stmt.executeUpdate() > 0;
         }catch (SQLException e){
             throw new TaskIdNotFound();
         }
-        return task;
+
     }
 
     @Override
@@ -179,6 +178,19 @@ public class MySqlTaskRepository implements TaskRepository {
 
         }catch (SQLException e){
             throw new ProjectIdNotFound();
+        }
+    }
+
+    @Override
+    public boolean assignTaskToProject(Integer projectId, Integer taskId) throws SQLException {
+
+        String sql = "Update Task set project_id = ? where id = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, projectId);
+            stmt.setInt(2, taskId);
+            return stmt.executeUpdate() > 0;
+        }catch (SQLException e) {
+            throw new SQLException("Failed to add task " + taskId + " to project " + projectId, e);
         }
     }
 }

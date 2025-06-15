@@ -24,14 +24,19 @@ public class UpdateProjectCommand implements Command {
         String name = scanner.nextLine();
         System.out.println("Enter new project description: ");
         String description = scanner.nextLine();
+        if (name.isEmpty() || description.isEmpty()){
+            System.err.println("Project name or description is required");
+            return;
+        }
 
         try {
-            Project projectId = SessionManager.getCurrentProject();
-            if(projectId == null){
+            Project project= SessionManager.getCurrentProject();
+            if(project == null){
                 System.err.println("No project found");
                 return;
             }
-            Project project = projectService.updateProject(name,description,projectId.getId());
+            Project projectUpdated = projectService.updateProject(name,description,project.getId());
+            SessionManager.setCurrentProject(projectUpdated);
             System.out.println("Project updated\n" + project);
         }catch (SQLException e){
             System.err.println("Failed to update project");

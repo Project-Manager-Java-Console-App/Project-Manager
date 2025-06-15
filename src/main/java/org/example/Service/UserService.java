@@ -40,7 +40,15 @@ public class UserService {
         return user;
     }
 
-    public boolean deleteUser(Integer id) throws SQLException, UsernameAlreadyExistsException {
+    public boolean updateUser(String username,int user_id) throws SQLException{
+        Users user = userRepository.findByName(username);
+        if(user==null){
+            throw new IllegalArgumentException("User not found");
+        }
+        return userRepository.update(user,user_id);
+    }
+
+    public boolean deleteUser(Integer id) throws SQLException{
         Users user = userRepository.findById(id);
         if(user==null){
             throw new IllegalArgumentException("User not found");
@@ -48,7 +56,7 @@ public class UserService {
         return userRepository.delete(user);
     }
 
-    public Users findByName(String username) throws SQLException, UsernameAlreadyExistsException {
+    public Users findByName(String username) throws SQLException {
         Users user = userRepository.findByName(username);
         if(user==null){
             throw new IllegalArgumentException("User not found");
