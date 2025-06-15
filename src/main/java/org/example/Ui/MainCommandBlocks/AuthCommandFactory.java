@@ -1,6 +1,9 @@
-package org.example.Ui.AuthCommands;
+package org.example.Ui.MainCommandBlocks;
 
 import org.example.Service.UserService;
+import org.example.Ui.AuthCommands.ExitCommand;
+import org.example.Ui.AuthCommands.LoginCommand;
+import org.example.Ui.AuthCommands.RegisterCommand;
 import org.example.Ui.Command;
 
 import java.util.Scanner;
