@@ -1,6 +1,5 @@
 package org.example.Ui;
 
-import org.example.Exceptions.UsernameAlreadyExistsException;
 
 import java.sql.SQLException;
 
