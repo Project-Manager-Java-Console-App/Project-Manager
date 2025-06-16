@@ -2,6 +2,7 @@ package org.example.Repository;
 
 import org.example.Exceptions.ProjectIdNotFound;
 import org.example.Exceptions.UserIdNotFound;
+import org.example.model.Project;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -66,15 +67,19 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
     }
 
     @Override
-    public List<Integer> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound {
-        String query = "SELECT id FROM project WHERE created_by = ?";
+    public List<Project> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound {
+        String query = "SELECT * FROM project WHERE created_by = ?";
         try(PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setInt(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
-                List<Integer> ids= new ArrayList<>();
+                List<Project> ids= new ArrayList<>();
                 while (rs.next()) {
                     int id = rs.getInt(1);
-                    ids.add(id);
+                    String name = rs.getString("project_name");
+                    String description = rs.getString("description");
+                    Project pr = Project.create(name,description,userId);
+                    pr.setId(id);
+                    ids.add(pr);
                 }
                 return ids;
             }

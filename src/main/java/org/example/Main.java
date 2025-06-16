@@ -30,7 +30,6 @@ public class Main {
             TaskUserService taskUserService = new TaskUserService(taskUserRepository);
             UserService userService = new UserService(userRepository);
             Scanner scanner = new Scanner(System.in);
-
             int choice;
 
             while (true) {

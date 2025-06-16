@@ -3,6 +3,7 @@ package org.example.Ui.UserCommands;
 import org.example.Exceptions.UserIdNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Ui.Command;
+import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 import java.util.List;
@@ -24,13 +25,13 @@ public class DisplayAllProjectsCreatedByUser implements Command {
         System.out.println("Displaying all projects created by user: " + users);
 
         try{
-            List<Integer> project_ids = projectUserService.getAllProjectsCreatedByUser(users.getId());
+            List<Project> project_ids = projectUserService.getAllProjectsCreatedByUser(users.getId());
             if (project_ids.isEmpty()) {
                 System.out.println("No projects assigned to user: " + users);
             }else {
                 System.out.println("Projects ids: ");
-                for (Integer project_id : project_ids) {
-                    System.out.println(project_id);
+                for (Project project : project_ids) {
+                    System.out.println(project);
                 }
             }
         }catch (Exception e){

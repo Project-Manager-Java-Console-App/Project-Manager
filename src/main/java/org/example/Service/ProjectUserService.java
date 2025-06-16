@@ -3,6 +3,8 @@ package org.example.Service;
 import org.example.Exceptions.ProjectIdNotFound;
 import org.example.Exceptions.UserIdNotFound;
 import org.example.Repository.ProjectUserRepository;
+import org.example.model.Project;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -34,7 +36,7 @@ public class ProjectUserService {
         return projectUserRepository.addUserToProject(projectId, userId);
     }
 
-    public List<Integer> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound {
+    public List<Project> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound {
         if (userId == null) {
             throw new UserIdNotFound();
         }

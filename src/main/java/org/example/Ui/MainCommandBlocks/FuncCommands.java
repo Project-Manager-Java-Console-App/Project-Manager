@@ -52,7 +52,7 @@ public class FuncCommands {
         commands.put(25,new DisplayTasksCreatedByUserCommand(taskService));
         commands.put(26,new DisplayTaskUserAdded(taskUserService));
         commands.put(27,new DisplayUserProfile());
-        commands.put(28,new DeletingUserCommand(userService,scanner));
+        commands.put(28,new DeletingUserCommand(userService,projectService,projectUserService,scanner));
         commands.put(29,new LogOutCommand());
         commands.put(30,new ExitCommand(databaseUtils));
 
