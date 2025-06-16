@@ -2,7 +2,6 @@ package org.example.Repository;
 
 import org.example.Exceptions.TaskIdNotFound;
 import org.example.Exceptions.UserIdNotFound;
-import org.example.model.Users;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

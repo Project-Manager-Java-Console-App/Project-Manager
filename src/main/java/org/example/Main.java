@@ -7,7 +7,6 @@ import org.example.Ui.DisplayChoiceMenu;
 import org.example.Ui.MainCommandBlocks.AfterLoginCommands;
 import org.example.Ui.MainCommandBlocks.AuthCommandFactory;
 import org.example.Ui.MainCommandBlocks.FuncCommands;
-import org.example.dataBase.Database;
 import org.example.dataBase.DatabaseUtils;
 import org.example.model.SessionManager;
 import java.sql.Connection;
@@ -17,7 +16,7 @@ public class Main {
     public static void main(String[] args)  {
 
         try {
-            Database factory; factory = new DatabaseUtils();
+            DatabaseUtils factory = new DatabaseUtils();
             Connection connection = factory.getConnection();
             ProjectRepository projectRepository = new MySqlProjectRepository(connection);
             ProjectUserRepository projectUserRepository = new MySqlProjectUserRepository(connection);
@@ -39,13 +38,13 @@ public class Main {
                     DisplayChoiceMenu.DisplayAuthMenu();
                     System.out.println("Please enter your choice: ");
                     choice = scanner.nextInt();
-                    Command command = AuthCommandFactory.getCommand(choice, userService, scanner);
+                    Command command = AuthCommandFactory.getCommand(choice, userService, scanner,factory);
                     command.execute();
                 } else if (SessionManager.getCurrentProject() == null) {
                     DisplayChoiceMenu.DisplayAfterLoginMenu();
                     System.out.println("Please enter your choice: ");
                     choice = scanner.nextInt();
-                    Command command = AfterLoginCommands.getCommand(choice, projectService, scanner);
+                    Command command = AfterLoginCommands.getCommand(choice, projectService, scanner,factory);
                     command.execute();
                 } else {
                     DisplayChoiceMenu.DisplayFuncMenu();
@@ -57,6 +56,7 @@ public class Main {
                             userService,
                             projectUserService,
                             taskUserService,
+                            factory,
                             scanner
                     ).getCommand(choice);
                     command.execute();

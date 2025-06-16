@@ -1,7 +1,6 @@
 package org.example.Service;
 
 import org.example.Repository.TaskUserRepository;
-import org.example.model.Users;
 
 import java.sql.SQLException;
 import java.util.List;

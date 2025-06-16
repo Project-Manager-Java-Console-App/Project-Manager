@@ -7,6 +7,8 @@ import org.example.Ui.Command;
 import org.example.Ui.ProjectCommands.*;
 import org.example.Ui.TaskCommands.*;
 import org.example.Ui.UserCommands.*;
+import org.example.dataBase.DatabaseUtils;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
@@ -21,6 +23,7 @@ public class FuncCommands {
             UserService userService,
             ProjectUserService projectUserService,
             TaskUserService taskUserService,
+            DatabaseUtils databaseUtils,
             Scanner scanner) {
         commands.put(1,new CreateProjectCommand(projectService,scanner));
         commands.put(2,new UpdateProjectCommand(projectService,scanner));
@@ -51,7 +54,7 @@ public class FuncCommands {
         commands.put(27,new DisplayUserProfile());
         commands.put(28,new DeletingUserCommand(userService,scanner));
         commands.put(29,new LogOutCommand());
-        commands.put(30,new ExitCommand());
+        commands.put(30,new ExitCommand(databaseUtils));
 
     }
 

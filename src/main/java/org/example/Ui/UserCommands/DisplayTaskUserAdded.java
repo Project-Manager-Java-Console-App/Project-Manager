@@ -3,7 +3,6 @@ package org.example.Ui.UserCommands;
 import org.example.Service.TaskUserService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
-import org.example.model.Task;
 import org.example.model.Users;
 
 import java.util.List;
