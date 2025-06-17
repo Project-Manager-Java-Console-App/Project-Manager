@@ -8,6 +8,7 @@ import org.example.model.Status;
 import org.example.model.Task;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -58,12 +59,17 @@ public class MySqlTaskRepository implements TaskRepository {
 
     @Override
     public boolean update(int taskId, String name, String description, Status status) throws SQLException {
-        String sql = "Update Task set task_name=? ,description=? ,status =? where id=?";
+        String sql = "Update Task set task_name=? ,description=? ,status =?,endDate=? where id=?";
         try (PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setString(1,name);
             stmt.setString(2, description);
             stmt.setString(3,status.name());
-            stmt.setInt(4, taskId);
+            if(status == Status.COMPLETED||status == Status.FAILED||status==Status.ABORTED) {
+                stmt.setDate(4,Date.valueOf(LocalDate.now()));
+            }else {
+                stmt.setDate(4,null);
+            }
+            stmt.setInt(5, taskId);
             return stmt.executeUpdate() > 0;
         }catch (SQLException e){
             throw new TaskIdNotFound();
@@ -143,10 +149,15 @@ public class MySqlTaskRepository implements TaskRepository {
 
     @Override
     public boolean changeStatus(Integer task_id, Status status) throws SQLException {
-        String query = "Update Task set status = ? where id = ?";
+        String query = "Update Task set status = ?,endDate=? where id = ?";
         try(PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, status.name());
-            stmt.setInt(2, task_id);
+            if(status == Status.COMPLETED||status == Status.FAILED||status==Status.ABORTED) {
+                stmt.setDate(2,Date.valueOf(LocalDate.now()));
+            }else {
+                stmt.setDate(2,null);
+            }
+            stmt.setInt(3, task_id);
             return stmt.executeUpdate() > 0;
         }
         catch (SQLException e){
