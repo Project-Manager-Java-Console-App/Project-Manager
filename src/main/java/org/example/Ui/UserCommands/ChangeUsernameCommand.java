@@ -5,6 +5,7 @@ import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class ChangeUsernameCommand implements Command {
@@ -21,22 +22,20 @@ public class ChangeUsernameCommand implements Command {
         scanner.nextLine();
         Users users = SessionManager.getCurrentUser();
         if (users == null){
-            System.err.println("User is required");
-            return true;
+            throw new RuntimeException("User is required");
         }
         System.out.println("Changing username: ");
         System.out.println("Enter your new Username: ");
         String username = scanner.nextLine();
         if (username.isEmpty()){
-            System.err.println("Username is required");
-            return true;
+           throw new RuntimeException("Username is required");
         }
 
         try{
             boolean updated = userService.updateUser(username, users.getId());
             System.out.println("User " + username + " has been updated"+ updated);
-        }catch (Exception e) {
-            System.err.println("Failed to change username");
+        }catch (SQLException e) {
+            throw new RuntimeException(e);
         }
         return true;
     }

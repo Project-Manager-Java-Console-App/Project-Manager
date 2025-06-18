@@ -1,6 +1,7 @@
 package org.example.Ui.UserCommands;
 
 import org.example.Exceptions.UserIdNotFound;
+import org.example.Exceptions.UserNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Ui.Command;
 import org.example.model.Project;
@@ -19,8 +20,7 @@ public class DisplayAllProjectsCreatedByUser implements Command {
     public boolean execute()  {
         Users users = SessionManager.getCurrentUser();
         if (users == null){
-            System.err.println("User is required");
-            return true;
+            throw new UserNotFound("User is empty");
         }
         System.out.println("Displaying all projects created by user: " + users);
 

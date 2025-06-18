@@ -6,6 +6,7 @@ import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FindByIdTaskCommand implements Command {
@@ -35,7 +36,7 @@ public class FindByIdTaskCommand implements Command {
             SessionManager.setCurrentTask(task);
             System.out.println("Task found");
             System.out.println(task);
-        }catch (Exception e){
+        }catch (SQLException e){
             throw new TaskNotFound("Task not found");
         }
         return true;

@@ -1,5 +1,6 @@
 package org.example.Ui.AuthCommands;
 
+import org.example.Exceptions.UserNotFound;
 import org.example.Service.UserService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
@@ -33,7 +34,7 @@ public class LoginCommand implements Command {
             SessionManager.login(user);
             System.out.println("Login complete. Welcome " + username);
         }catch (SQLException e){
-            System.err.println(e.getMessage());
+            throw new UserNotFound(e.getMessage());
         }
         return true;
     }

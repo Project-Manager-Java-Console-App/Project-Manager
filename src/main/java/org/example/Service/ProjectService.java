@@ -38,7 +38,7 @@ public class ProjectService {
         }
         Project project = projectRepository.findByName(name);
         if(project == null){
-            System.err.println("Invalid username");
+            throw new IllegalArgumentException("Project with name " + name + " does not exist");
         }
         return project;
     }
@@ -49,7 +49,7 @@ public class ProjectService {
         }
         Project project = projectRepository.findById(id);
         if(project == null){
-            System.err.println("Project not found");
+            throw new NullPointerException();
         }
         return project;
     }
@@ -68,7 +68,7 @@ public class ProjectService {
         }
         boolean added = taskRepository.assignTaskToProject(projectId, taskId);
         if(!added){
-            System.err.println("Failed to assign task " + taskId + " to project " + projectId);
+            throw new SQLException("Unable to assign task to project");
         }
     }
 }

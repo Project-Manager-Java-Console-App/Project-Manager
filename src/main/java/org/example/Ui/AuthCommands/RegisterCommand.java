@@ -33,7 +33,7 @@ public class RegisterCommand implements Command {
             System.out.println("Welcome "+username);
             SessionManager.login(user);
         }catch (UsernameAlreadyExistsException | SQLException e){
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
         return true;
     }

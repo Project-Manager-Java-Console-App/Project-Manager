@@ -5,6 +5,7 @@ import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class DeletingProjectCommand implements Command {
@@ -40,8 +41,8 @@ public class DeletingProjectCommand implements Command {
             }else {
                 System.err.println("Invalid answer entered");
             }
-        }catch (Exception e){
-            System.err.println("Failed to delete "+project.getName());
+        }catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
         }
         return true;
     }

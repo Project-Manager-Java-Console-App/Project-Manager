@@ -7,6 +7,7 @@ import org.example.model.SessionManager;
 import org.example.model.Task;
 import org.example.model.Users;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class RemovingUserFromTaskCommand implements Command {
@@ -26,29 +27,26 @@ public class RemovingUserFromTaskCommand implements Command {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if (task==null){
-            System.err.println("Task is required");
-            return true;
+            throw new RuntimeException("Task is required");
         }
         System.out.println("Removing user from task: " + task.getName());
         System.out.println("Enter username to remove: ");
         String username = scanner.nextLine();
         if (username.isEmpty()){
-            System.err.println("Username is required");
-            return true;
+            throw new RuntimeException("username is required");
         }
         try{
             Users user = userService.findByName(username);
             if(user == null){
-                System.err.println("User not found");
-                return true;
+                throw new RuntimeException("User is required");
             }
             boolean removed = taskUserService.removeUserFromTask(task.getId(), user.getId());
             if(!removed){
-                System.err.println("Failed to remove user from task: " + task.getName());
+                throw  new SQLException("Failed to remove user from task");
             }
             System.out.println("Removed user from task: " + task.getName());
-        }catch (Exception e){
-            System.err.println("Failed to remove user from task: " + task.getName());
+        }catch (SQLException e){
+            throw new RuntimeException(e);
         }
         return true;
     }

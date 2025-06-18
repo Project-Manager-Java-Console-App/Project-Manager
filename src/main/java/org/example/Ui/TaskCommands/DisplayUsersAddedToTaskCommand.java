@@ -5,6 +5,7 @@ import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class DisplayUsersAddedToTaskCommand implements Command {
@@ -31,8 +32,8 @@ public class DisplayUsersAddedToTaskCommand implements Command {
             for (Integer user : users) {
                 System.out.println(user);
             }
-        }catch (Exception e){
-            System.err.println("Failed to display users");
+        }catch (SQLException e){
+            throw new RuntimeException("Failed to display assigned users in task");
         }
         return true;
     }

@@ -1,11 +1,13 @@
 package org.example.Ui.ProjectCommands;
 
+import org.example.Exceptions.TaskNotFound;
 import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class DisplayAllTaskByProjectId implements Command {
@@ -30,8 +32,10 @@ public class DisplayAllTaskByProjectId implements Command {
             for (Task task : tasks) {
                 System.out.println(task);
             }
-        }catch (Exception e){
-            System.err.println("Failed to display all tasks from project: "+project.getName());
+        }catch (TaskNotFound e){
+            throw new TaskNotFound(e.getMessage());
+        }catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
         }
         return true;
     }

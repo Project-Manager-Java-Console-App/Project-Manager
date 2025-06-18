@@ -24,8 +24,7 @@ public class FindUserByNameCommand implements Command {
         System.out.println("Enter User username");
         String username = scanner.nextLine();
         if (username.isEmpty()){
-            System.err.println("Username is required");
-            return true;
+            throw new IllegalArgumentException("username is empty");
         }
 
         try {

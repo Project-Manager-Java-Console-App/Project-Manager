@@ -23,8 +23,7 @@ public class FindByIdUserCommand implements Command {
         System.out.println("Enter id: ");
         int id =scanner.nextInt();
         if (id == -1){
-            System.err.println("User not found");
-            return true;
+            throw new IllegalArgumentException("id is null");
         }
 
         try {

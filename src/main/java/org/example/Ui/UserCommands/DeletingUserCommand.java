@@ -1,6 +1,7 @@
 package org.example.Ui.UserCommands;
 
 import org.example.Exceptions.UserIdNotFound;
+import org.example.Exceptions.UserNotFound;
 import org.example.Service.ProjectService;
 import org.example.Service.ProjectUserService;
 import org.example.Service.UserService;
@@ -9,6 +10,7 @@ import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -30,15 +32,13 @@ public class DeletingUserCommand implements Command {
         scanner.nextLine();
         Users users = SessionManager.getCurrentUser();
         if (users == null){
-            System.err.println("User is required");
-            return true;
+            throw new UserNotFound("User not found");
         }
         System.out.println("Deleting user");
         System.out.println("Are you sure you want to delete this user?(Y/N)");
         String answer = scanner.nextLine();
         if (answer.isEmpty()){
-            System.err.println("Answer is required");
-            return true;
+            throw new IllegalArgumentException("Answer is empty");
         }
         try {
             if (answer.equals("Y")) {
@@ -52,7 +52,7 @@ public class DeletingUserCommand implements Command {
 
                 boolean deleted = userService.deleteUser(users.getId());
                 if (!deleted) {
-                    System.err.println("Failed to delete user");
+                    throw new SQLException("Failed to delete user");
                 }else {
                     SessionManager.logout();
                 }
@@ -60,7 +60,7 @@ public class DeletingUserCommand implements Command {
             }else if (answer.equals("N")) {
                 System.out.println("Deleting process is rejected");
             }
-        }catch (Exception e) {
+        }catch (SQLException e) {
             throw new UserIdNotFound();
         }
         return true;

@@ -8,6 +8,7 @@ import org.example.model.SessionManager;
 import org.example.model.Task;
 import org.example.model.Users;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class AddingUserToTaskCommand implements Command {
@@ -45,8 +46,10 @@ public class AddingUserToTaskCommand implements Command {
             if(!addedUser){
                 System.err.println("Failed to add user");
             }
-        }catch (Exception e){
-            System.err.println("Failed to add user");
+        }catch (UserNotFound e){
+           throw new UserNotFound(username);
+        }catch (SQLException e){
+            throw new RuntimeException("Database connection error");
         }
         return true;
 

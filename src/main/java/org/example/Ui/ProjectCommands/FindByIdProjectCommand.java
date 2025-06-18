@@ -1,11 +1,13 @@
 package org.example.Ui.ProjectCommands;
 
+import org.example.Exceptions.ProjectIdNotFound;
 import org.example.Exceptions.ProjectNotFound;
 import org.example.Service.ProjectService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FindByIdProjectCommand implements Command {
@@ -35,8 +37,10 @@ public class FindByIdProjectCommand implements Command {
             SessionManager.setCurrentProject(project);
             System.out.println("Project found");
             System.out.println(project);
-        }catch (Exception e) {
-            throw new RuntimeException("Failed to find project");
+        }catch (ProjectIdNotFound e) {
+            throw new ProjectIdNotFound();
+        }catch (SQLException e){
+            throw new RuntimeException(e.getMessage());
         }
         return true;
     }

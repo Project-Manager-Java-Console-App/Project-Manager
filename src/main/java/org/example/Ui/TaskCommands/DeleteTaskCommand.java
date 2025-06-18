@@ -1,10 +1,12 @@
 package org.example.Ui.TaskCommands;
 
+import org.example.Exceptions.UserNotFound;
 import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class DeleteTaskCommand implements Command {
@@ -22,14 +24,13 @@ public class DeleteTaskCommand implements Command {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if(task==null){
-            System.err.println("Task is required");
-            return true;
+            throw new UserNotFound("Task not found");
         }
         System.out.println("Deleting task "+task.getName());
         System.out.println("Do you want to delete the task "+task.getName()+ "(Y/N)");
         String answer = scanner.nextLine();
         if (answer.isEmpty()){
-            System.err.println("Answer is required");
+            throw new IllegalArgumentException("answer cannot be empty");
         }
         try{
             if (answer.equals("Y")) {
@@ -42,8 +43,8 @@ public class DeleteTaskCommand implements Command {
             }else if (answer.equals("N")) {
                 System.out.println("Task is not deleted.");
             }
-        }catch (Exception e){
-            System.err.println("Failed to delete task");
+        }catch (SQLException e){
+            throw new RuntimeException("Failed to delete task");
         }
         return true;
     }

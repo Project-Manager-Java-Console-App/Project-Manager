@@ -38,7 +38,7 @@ public class UpdateProjectCommand implements Command {
             SessionManager.setCurrentProject(projectUpdated);
             System.out.println("Project updated\n" + project);
         }catch (SQLException e){
-            System.err.println("Failed to update project");
+            throw new RuntimeException();
         }
         return true;
     }

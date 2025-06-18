@@ -1,5 +1,6 @@
 package org.example.Ui.ProjectCommands;
 
+import org.example.Exceptions.UserIdNotFound;
 import org.example.Exceptions.UserNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Service.UserService;
@@ -8,6 +9,7 @@ import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class AddUserToProject implements Command {
@@ -48,8 +50,8 @@ public class AddUserToProject implements Command {
                 System.out.println("Failed to add User to Project: "+project.getName());
             }
 
-        }catch (Exception e){
-            System.err.println("Failed to add user to project: "+project.getName());
+        }catch (SQLException e){
+            throw new UserNotFound("User "+username+" Not Found");
         }
         return true;
     }

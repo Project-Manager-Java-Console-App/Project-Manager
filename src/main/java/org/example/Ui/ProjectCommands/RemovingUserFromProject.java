@@ -1,5 +1,6 @@
 package org.example.Ui.ProjectCommands;
 
+import org.example.Exceptions.UserIdNotFound;
 import org.example.Exceptions.UserNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Service.UserService;
@@ -8,6 +9,7 @@ import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class RemovingUserFromProject implements Command {
@@ -45,8 +47,10 @@ public class RemovingUserFromProject implements Command {
                 System.out.println("Removed "+username+" from Project: "+project.getName());
             }
 
-        }catch (Exception e){
-            System.err.println("Failed to remove user from project: "+project.getName());
+        }catch (UserIdNotFound e){
+            throw new UserNotFound("Username "+username+" Not Found");
+        }catch (SQLException e){
+            throw new RuntimeException();
         }
         return true;
     }

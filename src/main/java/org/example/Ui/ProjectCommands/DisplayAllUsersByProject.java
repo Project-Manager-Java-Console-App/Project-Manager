@@ -1,10 +1,13 @@
 package org.example.Ui.ProjectCommands;
 
+import org.example.Exceptions.ProjectIdNotFound;
+import org.example.Exceptions.UserIdNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class DisplayAllUsersByProject implements Command {
@@ -29,8 +32,8 @@ public class DisplayAllUsersByProject implements Command {
             for (Integer user_id : users) {
                 System.out.println(user_id);
             }
-        }catch (Exception e){
-            System.err.println("Failed to display all users assigned to project: "+project.getName());
+        }catch (UserIdNotFound e){
+            throw new UserIdNotFound();
         }
         return true;
     }

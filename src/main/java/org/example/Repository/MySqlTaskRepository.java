@@ -96,7 +96,7 @@ public class MySqlTaskRepository implements TaskRepository {
                 return task;
             }
         } catch (SQLException e) {
-            throw new UsernameAlreadyExistsException(name);
+            throw new UsernameAlreadyExistsException();
         }
     }
 

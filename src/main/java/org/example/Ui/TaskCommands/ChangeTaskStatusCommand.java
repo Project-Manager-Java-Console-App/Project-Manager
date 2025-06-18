@@ -6,6 +6,7 @@ import org.example.model.SessionManager;
 import org.example.model.Status;
 import org.example.model.Task;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import static org.example.Ui.GlobalMethods.GlobalMethods.enterStatus;
@@ -39,8 +40,8 @@ public class ChangeTaskStatusCommand implements Command {
             }
             System.out.println("Changed task status of "+ task.getName());
 
-        }catch (Exception e){
-            System.err.println("Failed to change task status of " + task.getName());
+        }catch (SQLException e){
+            throw new RuntimeException("Database connection error");
         }
         return true;
     }

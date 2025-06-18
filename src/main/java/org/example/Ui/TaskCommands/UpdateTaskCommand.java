@@ -4,6 +4,7 @@ import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.*;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 import static org.example.Ui.GlobalMethods.GlobalMethods.enterStatus;
@@ -21,8 +22,7 @@ public class UpdateTaskCommand implements Command {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if (task==null){
-            System.err.println("Task is required");
-            return true;
+            throw new RuntimeException("Task not found");
         }
         System.out.println("Enter new name: ");
         String name = scanner.nextLine();
@@ -31,15 +31,14 @@ public class UpdateTaskCommand implements Command {
 
         Status newStatus =enterStatus(scanner);
         if(name.isEmpty()||description.isEmpty()||newStatus==null){
-            System.err.println("Name, description and status is required");
-            return true;
+            throw new RuntimeException("Name and description are required");
         }
 
         try{
             taskService.updateTask(name,description,newStatus,task.getId());
             System.out.println("Task updated successfully");
-        }catch (Exception e){
-            System.err.println("Failed to update");
+        }catch (SQLException e){
+            throw new RuntimeException(e);
         }
 
         return true;

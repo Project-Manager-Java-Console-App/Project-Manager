@@ -15,7 +15,7 @@ public class UserService {
 
     public Users registerUser(String username, String password) throws UsernameAlreadyExistsException, SQLException {
         if(userRepository.findByName(username)!=null){
-            throw new UsernameAlreadyExistsException(username);
+            throw new UsernameAlreadyExistsException();
         }
         return userRepository.save(Users.registerNew(username,password));
 

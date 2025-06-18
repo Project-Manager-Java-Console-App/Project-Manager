@@ -5,6 +5,8 @@ import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 
+import java.awt.print.PrinterAbortException;
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class CreateProjectCommand implements Command {
@@ -33,7 +35,7 @@ public class CreateProjectCommand implements Command {
             SessionManager.setCurrentProject(project);
             System.out.println("Project created");
         }catch (Exception e){
-            System.err.println("Failed to create project");
+           throw new RuntimeException(e.getMessage());
         }
         return true;
     }

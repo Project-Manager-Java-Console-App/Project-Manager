@@ -45,7 +45,7 @@ public class AddTaskToProject implements Command {
          projectService.addTaskToProject(project.getId(), task.getId());
 
      }catch (Exception e){
-         System.err.println("Failed to add task to project: "+project.getName());
+         throw new TaskNotFound("Task "+name+"Not Found");
      }
      return true;
     }

@@ -1,10 +1,11 @@
 package org.example.Ui.ProjectCommands;
 
+import org.example.Exceptions.ProjectNotFound;
+import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Service.ProjectService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
-
 import java.util.Scanner;
 
 public class FindByNameProject implements Command {
@@ -32,8 +33,10 @@ public class FindByNameProject implements Command {
             }
             SessionManager.setCurrentProject(project);
             System.out.println("Project found\n" + project);
-        }catch (Exception e) {
-            System.err.println("Project not found");
+        }catch (ProjectNotFound e) {
+            throw new ProjectNotFound(e.getMessage());
+        }catch (UsernameAlreadyExistsException e){
+            throw new IllegalArgumentException("Username already exists");
         }
         return true;
     }

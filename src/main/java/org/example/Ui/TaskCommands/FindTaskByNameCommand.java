@@ -1,11 +1,13 @@
 package org.example.Ui.TaskCommands;
 
 import org.example.Exceptions.TaskNotFound;
+import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FindTaskByNameCommand implements Command {
@@ -35,7 +37,7 @@ public class FindTaskByNameCommand implements Command {
             System.out.println("Task found");
             System.out.println(task);
         }catch (Exception e){
-            System.err.println("Failed to find");
+            throw new TaskNotFound("Task not found");
         }
         return true;
     }
