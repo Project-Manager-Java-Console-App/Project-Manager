@@ -13,7 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
-public class FuncCommands {
+public class FuncCommands implements CommandProvider {
 
     private final Map<Integer,Command> commands = new HashMap<>();
 
@@ -58,11 +58,8 @@ public class FuncCommands {
 
     }
 
+    @Override
     public Command getCommand(int choice){
-        Command command = commands.get(choice);
-        if(command == null){
-            command = ()-> System.out.println("Invalid choice");
-        }
-        return command;
+        return commands.getOrDefault(choice,() ->{ System.out.println("Invalid choice");return false;});
     }
 }

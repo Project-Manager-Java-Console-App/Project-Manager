@@ -1,6 +1,5 @@
 package org.example.Service;
 
-import org.example.Exceptions.ProjectNotFound;
 import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Repository.ProjectRepository;
 import org.example.Repository.TaskRepository;
@@ -39,7 +38,7 @@ public class ProjectService {
         }
         Project project = projectRepository.findByName(name);
         if(project == null){
-            throw new UsernameAlreadyExistsException("Username already exists");
+            System.err.println("Invalid username");
         }
         return project;
     }
@@ -50,7 +49,7 @@ public class ProjectService {
         }
         Project project = projectRepository.findById(id);
         if(project == null){
-            throw new ProjectNotFound("Project not found");
+            System.err.println("Project not found");
         }
         return project;
     }
@@ -69,7 +68,7 @@ public class ProjectService {
         }
         boolean added = taskRepository.assignTaskToProject(projectId, taskId);
         if(!added){
-            throw new SQLException("Failed to assign task " + taskId + " to project " + projectId);
+            System.err.println("Failed to assign task " + taskId + " to project " + projectId);
         }
     }
 }

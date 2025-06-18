@@ -18,7 +18,7 @@ public class DatabaseUtils implements Database {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, user, password);
-        }catch (Exception e){
+        }catch (ClassNotFoundException e){
             throw new SQLException("JDBC driver not found",e);
         }
     }

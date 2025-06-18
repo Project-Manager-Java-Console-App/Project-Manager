@@ -26,19 +26,19 @@ public class DeletingUserCommand implements Command {
     }
 
     @Override
-    public void execute()  {
+    public boolean execute()  {
         scanner.nextLine();
         Users users = SessionManager.getCurrentUser();
         if (users == null){
             System.err.println("User is required");
-            return;
+            return true;
         }
         System.out.println("Deleting user");
         System.out.println("Are you sure you want to delete this user?(Y/N)");
         String answer = scanner.nextLine();
         if (answer.isEmpty()){
             System.err.println("Answer is required");
-            return;
+            return true;
         }
         try {
             if (answer.equals("Y")) {
@@ -63,5 +63,6 @@ public class DeletingUserCommand implements Command {
         }catch (Exception e) {
             throw new UserIdNotFound();
         }
+        return true;
     }
 }

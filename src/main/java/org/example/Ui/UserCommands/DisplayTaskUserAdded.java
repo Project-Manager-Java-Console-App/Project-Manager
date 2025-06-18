@@ -15,11 +15,11 @@ public class DisplayTaskUserAdded implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Users user = SessionManager.getCurrentUser();
         if (user == null){
             System.err.println("User is required");
-            return;
+            return true;
         }
         System.out.println("Displaying Task in which "+user.getUsername()+" is assigned!");
 
@@ -37,5 +37,6 @@ public class DisplayTaskUserAdded implements Command {
         }catch (Exception e){
             System.err.println("Failed to display task assigned to user");
         }
+        return true;
     }
 }

@@ -22,19 +22,19 @@ public class AddTaskToProject implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
      scanner.nextLine();
      Project project = SessionManager.getCurrentProject();
      if(project==null){
          System.err.println("No current project selected.");
-         return;
+         return true;
      }
      System.out.println("Adding task to project: "+project.getName());
      System.out.println("Please enter the name of the task you would like to add: ");
      String name = scanner.nextLine();
      if (name.isEmpty()) {
          System.err.println("Please enter the name of the task you would like to add: ");
-         return;
+
      }
      try{
          Task task = taskService.findByName(name);
@@ -47,6 +47,6 @@ public class AddTaskToProject implements Command {
      }catch (Exception e){
          System.err.println("Failed to add task to project: "+project.getName());
      }
-
+     return true;
     }
 }

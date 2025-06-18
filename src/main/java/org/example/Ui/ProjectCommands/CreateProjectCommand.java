@@ -17,7 +17,7 @@ public class CreateProjectCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         System.out.print("Enter project name: ");
         String projectName = scanner.nextLine();
@@ -25,7 +25,6 @@ public class CreateProjectCommand implements Command {
         String projectDescription = scanner.nextLine();
         if(projectName.isEmpty() || projectDescription.isEmpty()){
             System.err.println("Project name or description is empty");
-            return;
         }
 
         try{
@@ -36,6 +35,6 @@ public class CreateProjectCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to create project");
         }
-
+        return true;
     }
 }

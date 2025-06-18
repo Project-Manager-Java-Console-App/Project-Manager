@@ -33,7 +33,6 @@ public class MySqlUserRepository implements UserRepository {
         }catch (SQLException e) {
             throw new SQLException("Error while saving user: ", e);
         }
-
     }
 
     @Override

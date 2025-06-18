@@ -17,19 +17,19 @@ public class ChangeUsernameCommand implements Command {
     }
 
     @Override
-    public void execute()  {
+    public boolean execute()  {
         scanner.nextLine();
         Users users = SessionManager.getCurrentUser();
         if (users == null){
             System.err.println("User is required");
-            return;
+            return true;
         }
         System.out.println("Changing username: ");
         System.out.println("Enter your new Username: ");
         String username = scanner.nextLine();
         if (username.isEmpty()){
             System.err.println("Username is required");
-            return;
+            return true;
         }
 
         try{
@@ -38,5 +38,6 @@ public class ChangeUsernameCommand implements Command {
         }catch (Exception e) {
             System.err.println("Failed to change username");
         }
+        return true;
     }
 }

@@ -1,7 +1,6 @@
 package org.example.Ui.TaskCommands;
 
 import org.example.Exceptions.TaskNotFound;
-import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
@@ -19,14 +18,13 @@ public class FindByIdTaskCommand implements Command {
     }
 
     @Override
-    public void execute()  {
+    public boolean execute()  {
         scanner.nextLine();
         System.out.println("Searching for Task by id");
         System.out.println("Enter task id: ");
         int id = scanner.nextInt();
         if (id==0){
             System.err.println("Task id is required");
-            return;
         }
 
         try{
@@ -40,5 +38,6 @@ public class FindByIdTaskCommand implements Command {
         }catch (Exception e){
             throw new TaskNotFound("Task not found");
         }
+        return true;
     }
 }

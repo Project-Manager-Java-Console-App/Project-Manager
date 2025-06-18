@@ -15,11 +15,11 @@ public class DisplayAllUsersByProject implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Project project = SessionManager.getCurrentProject();
         if (project==null){
             System.err.println("Project is required");
-            return;
+            return true;
         }
         System.out.println("Displaying all users assigned to project: "+project.getName());
 
@@ -32,5 +32,6 @@ public class DisplayAllUsersByProject implements Command {
         }catch (Exception e){
             System.err.println("Failed to display all users assigned to project: "+project.getName());
         }
+        return true;
     }
 }

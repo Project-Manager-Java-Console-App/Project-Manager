@@ -17,13 +17,12 @@ public class FindByNameProject implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         System.out.println("Searched project name: ");
         String name = scanner.nextLine();
         if(name.isEmpty()){
             System.err.println("Project name is required");
-            return;
         }
 
         try {
@@ -36,5 +35,6 @@ public class FindByNameProject implements Command {
         }catch (Exception e) {
             System.err.println("Project not found");
         }
+        return true;
     }
 }

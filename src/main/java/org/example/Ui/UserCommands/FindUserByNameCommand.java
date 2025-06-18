@@ -18,14 +18,14 @@ public class FindUserByNameCommand implements Command {
     }
 
     @Override
-    public void execute()  {
+    public boolean execute()  {
         scanner.nextLine();
         System.out.println("Finding user by name");
         System.out.println("Enter User username");
         String username = scanner.nextLine();
         if (username.isEmpty()){
             System.err.println("Username is required");
-            return;
+            return true;
         }
 
         try {
@@ -38,5 +38,6 @@ public class FindUserByNameCommand implements Command {
         }catch (SQLException e){
             throw new UserNotFound(username);
         }
+        return true;
     }
 }

@@ -17,17 +17,17 @@ public class CreateTaskInProject implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Project project = SessionManager.getCurrentProject();
         if (project==null){
             System.err.println("Project is required");
-            return;
+            return true;
         }
         Users user = SessionManager.getCurrentUser();
         if (user==null){
             System.err.println("User is required");
-            return;
+            return true;
         }
         System.out.println("Creating task " + project.getName() + " in " + user.getUsername());
         System.out.println("Please enter name: ");
@@ -36,7 +36,6 @@ public class CreateTaskInProject implements Command {
         String description = scanner.nextLine();
         if (name.isEmpty() || description.isEmpty()){
             System.err.println("Name or description is required");
-            return;
         }
 
         try {
@@ -48,6 +47,6 @@ public class CreateTaskInProject implements Command {
         }catch (Exception e){
             System.err.println("Failed to create task in" + project.getName() + " by " + user.getUsername());
         }
-
+        return true;
     }
 }

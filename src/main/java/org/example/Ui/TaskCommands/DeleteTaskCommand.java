@@ -18,19 +18,18 @@ public class DeleteTaskCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if(task==null){
             System.err.println("Task is required");
-            return;
+            return true;
         }
         System.out.println("Deleting task "+task.getName());
         System.out.println("Do you want to delete the task "+task.getName()+ "(Y/N)");
         String answer = scanner.nextLine();
         if (answer.isEmpty()){
             System.err.println("Answer is required");
-            return;
         }
         try{
             if (answer.equals("Y")) {
@@ -46,5 +45,6 @@ public class DeleteTaskCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to delete task");
         }
+        return true;
     }
 }

@@ -30,7 +30,7 @@ public class MySqlProjectRepository
                 }
             }
         } catch (SQLException e) {
-            throw new ProjectIdNotFound();
+            System.err.println(e.getMessage());
         }
         return project;
     }
@@ -42,9 +42,10 @@ public class MySqlProjectRepository
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, project.getId());
             return stmt.executeUpdate() > 0;
-        } catch (SQLException e) {
-            throw new ProjectIdNotFound();
+        } catch (ProjectIdNotFound e) {
+            System.err.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
@@ -58,8 +59,8 @@ public class MySqlProjectRepository
             if(rows == 0) {
                 throw new ProjectIdNotFound();
             }
-        }catch (SQLException e){
-            throw new ProjectIdNotFound();
+        }catch (ProjectIdNotFound e){
+            System.err.println(e.getMessage());
         }
         return project;
     }
@@ -81,7 +82,8 @@ public class MySqlProjectRepository
             }
         }
         catch (SQLException e) {
-            throw new UsernameAlreadyExistsException(name);
+            System.err.println(e.getMessage());
+            return null;
         }
     }
 

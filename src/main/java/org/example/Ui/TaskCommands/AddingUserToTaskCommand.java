@@ -22,19 +22,18 @@ public class AddingUserToTaskCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if (task == null){
             System.err.println("Task is required");
-            return;
+            return true;
         }
         System.out.println("Adding user to "+task.getName());
         System.out.println("Enter username of User you want to add: ");
         String username = scanner.nextLine();
         if (username.isEmpty()){
             System.err.println("Username is required");
-            return;
         }
 
         try{
@@ -49,5 +48,7 @@ public class AddingUserToTaskCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to add user");
         }
+        return true;
+
     }
 }

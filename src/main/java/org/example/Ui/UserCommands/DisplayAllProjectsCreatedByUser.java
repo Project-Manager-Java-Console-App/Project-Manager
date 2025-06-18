@@ -16,11 +16,11 @@ public class DisplayAllProjectsCreatedByUser implements Command {
     }
 
     @Override
-    public void execute()  {
+    public boolean execute()  {
         Users users = SessionManager.getCurrentUser();
         if (users == null){
             System.err.println("User is required");
-            return;
+            return true;
         }
         System.out.println("Displaying all projects created by user: " + users);
 
@@ -37,6 +37,6 @@ public class DisplayAllProjectsCreatedByUser implements Command {
         }catch (Exception e){
             throw new UserIdNotFound();
         }
-
+        return true;
     }
 }

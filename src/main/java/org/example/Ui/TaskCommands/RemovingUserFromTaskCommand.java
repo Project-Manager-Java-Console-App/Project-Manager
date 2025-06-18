@@ -1,6 +1,5 @@
 package org.example.Ui.TaskCommands;
 
-import org.example.Exceptions.UserNotFound;
 import org.example.Service.TaskUserService;
 import org.example.Service.UserService;
 import org.example.Ui.Command;
@@ -23,24 +22,25 @@ public class RemovingUserFromTaskCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if (task==null){
             System.err.println("Task is required");
-            return;
+            return true;
         }
         System.out.println("Removing user from task: " + task.getName());
         System.out.println("Enter username to remove: ");
         String username = scanner.nextLine();
         if (username.isEmpty()){
             System.err.println("Username is required");
-            return;
+            return true;
         }
         try{
             Users user = userService.findByName(username);
             if(user == null){
-                throw new UserNotFound(username);
+                System.err.println("User not found");
+                return true;
             }
             boolean removed = taskUserService.removeUserFromTask(task.getId(), user.getId());
             if(!removed){
@@ -50,5 +50,6 @@ public class RemovingUserFromTaskCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to remove user from task: " + task.getName());
         }
+        return true;
     }
 }

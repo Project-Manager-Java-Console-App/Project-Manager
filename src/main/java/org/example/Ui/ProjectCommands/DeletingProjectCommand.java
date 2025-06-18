@@ -17,12 +17,12 @@ public class DeletingProjectCommand implements Command {
         this.scanner = scanner;
     }
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Project project = SessionManager.getCurrentProject();
         if (project==null){
             System.err.println("Project is required");
-            return;
+            return true;
         }
         System.out.println("Are you sure you want to delete the project "+project.getName()+"(Y/N)");
         try {
@@ -43,5 +43,6 @@ public class DeletingProjectCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to delete "+project.getName());
         }
+        return true;
     }
 }

@@ -17,14 +17,14 @@ public class FindByIdUserCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         System.out.println("Searching for user by id");
         System.out.println("Enter id: ");
         int id =scanner.nextInt();
         if (id == -1){
             System.err.println("User not found");
-            return;
+            return true;
         }
 
         try {
@@ -37,5 +37,6 @@ public class FindByIdUserCommand implements Command {
         }catch (Exception e) {
             throw new UserNotFound("User not found");
         }
+        return true;
     }
 }

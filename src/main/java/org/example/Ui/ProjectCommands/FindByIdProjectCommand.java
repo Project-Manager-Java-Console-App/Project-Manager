@@ -1,7 +1,6 @@
 package org.example.Ui.ProjectCommands;
 
 import org.example.Exceptions.ProjectNotFound;
-import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Service.ProjectService;
 import org.example.Ui.Command;
 import org.example.model.Project;
@@ -19,14 +18,13 @@ public class FindByIdProjectCommand implements Command {
     }
 
     @Override
-    public void execute()  {
+    public boolean execute()  {
         scanner.nextLine();
         System.out.println("Finding Project by ID");
         System.out.println("Enter Project ID");
         int id = scanner.nextInt();
         if (id ==0){
             System.err.println("Project ID is required");
-            return;
         }
 
         try{
@@ -40,5 +38,6 @@ public class FindByIdProjectCommand implements Command {
         }catch (Exception e) {
             throw new RuntimeException("Failed to find project");
         }
+        return true;
     }
 }

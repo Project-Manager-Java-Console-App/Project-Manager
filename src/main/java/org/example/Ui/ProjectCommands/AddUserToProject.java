@@ -22,19 +22,18 @@ public class AddUserToProject implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Project project = SessionManager.getCurrentProject();
         if(project==null){
             System.err.println("Project not found");
-            return;
+            return true;
         }
         System.out.println("Adding User to Project: "+project.getName());
         System.out.println("Enter username to add user to "+project.getName());
         String username = scanner.nextLine();
         if (username==null){
             System.err.println("Username is required");
-            return;
         }
 
         try{
@@ -52,6 +51,6 @@ public class AddUserToProject implements Command {
         }catch (Exception e){
             System.err.println("Failed to add user to project: "+project.getName());
         }
-
+        return true;
     }
 }

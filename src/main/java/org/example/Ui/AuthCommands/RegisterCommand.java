@@ -19,7 +19,7 @@ public class RegisterCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
 
         System.out.print("Enter username: ");
         scanner.nextLine();
@@ -30,10 +30,11 @@ public class RegisterCommand implements Command {
         try{
             Users user= userService.registerUser(username,password);
             System.out.println("registered user"+ user);
-            System.out.print("Welcome "+username);
+            System.out.println("Welcome "+username);
             SessionManager.login(user);
         }catch (UsernameAlreadyExistsException | SQLException e){
             System.err.println(e.getMessage());
         }
+        return true;
     }
 }

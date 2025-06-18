@@ -9,13 +9,28 @@ import org.example.dataBase.DatabaseUtils;
 
 import java.util.Scanner;
 
-public class AuthCommandFactory {
-    public static Command getCommand(int choice, UserService userService, Scanner scanner, DatabaseUtils databaseUtils){
+public class AuthCommandFactory implements CommandProvider{
+
+        private final UserService userService;
+        private final DatabaseUtils databaseUtils;
+        private final Scanner scanner;
+        public AuthCommandFactory(UserService userService, DatabaseUtils databaseUtils, Scanner scanner) {
+            this.userService = userService;
+            this.databaseUtils = databaseUtils;
+            this.scanner = scanner;
+        }
+
+
+    @Override
+    public Command getCommand(int choice) {
         return switch (choice){
             case 1 -> new RegisterCommand(userService, scanner);
             case 2 -> new LoginCommand(userService, scanner);
             case 3 -> new ExitCommand(databaseUtils);
-            default -> () ->System.out.println("Invalid choice");
+            default -> () ->{System.out.println("Invalid choice");return true;};
         };
     }
 }
+
+
+

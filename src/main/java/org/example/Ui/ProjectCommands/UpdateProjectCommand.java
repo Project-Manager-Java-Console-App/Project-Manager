@@ -18,7 +18,7 @@ public class UpdateProjectCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         System.out.println("Enter new project name: ");
         String name = scanner.nextLine();
@@ -26,14 +26,13 @@ public class UpdateProjectCommand implements Command {
         String description = scanner.nextLine();
         if (name.isEmpty() || description.isEmpty()){
             System.err.println("Project name or description is required");
-            return;
         }
 
         try {
             Project project= SessionManager.getCurrentProject();
             if(project == null){
                 System.err.println("No project found");
-                return;
+                return true;
             }
             Project projectUpdated = projectService.updateProject(name,description,project.getId());
             SessionManager.setCurrentProject(projectUpdated);
@@ -41,5 +40,6 @@ public class UpdateProjectCommand implements Command {
         }catch (SQLException e){
             System.err.println("Failed to update project");
         }
+        return true;
     }
 }

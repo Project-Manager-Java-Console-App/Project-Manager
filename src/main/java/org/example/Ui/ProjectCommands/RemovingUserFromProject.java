@@ -22,19 +22,18 @@ public class RemovingUserFromProject implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Project project = SessionManager.getCurrentProject();
         if (project == null){
             System.err.println("Project is required");
-            return;
+            return true;
         }
         System.out.println("Removing User From Project: "+project.getName());
         System.out.println("Enter username to remove");
         String username = scanner.nextLine();
         if (username.isEmpty()){
             System.err.println("Username is required");
-            return;
         }
         try{
             Users user = userService.findByName(username);
@@ -49,5 +48,6 @@ public class RemovingUserFromProject implements Command {
         }catch (Exception e){
             System.err.println("Failed to remove user from project: "+project.getName());
         }
+        return true;
     }
 }

@@ -20,18 +20,17 @@ public class ChangeTaskStatusCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if (task==null){
             System.err.println("Task is required");
-            return;
+            return true;
         }
         System.out.println("Change task status of "+ task.getName());
         Status newStatus = enterStatus(scanner);
         if (newStatus==null){
             System.err.println("Status is required");
-            return;
         }
         try{
             boolean changedStatus = taskService.changeStatus(task.getId(), newStatus);
@@ -43,7 +42,6 @@ public class ChangeTaskStatusCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to change task status of " + task.getName());
         }
+        return true;
     }
-
-
 }

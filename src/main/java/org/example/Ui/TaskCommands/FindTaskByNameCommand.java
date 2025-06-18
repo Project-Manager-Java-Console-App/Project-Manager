@@ -18,14 +18,13 @@ public class FindTaskByNameCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         System.out.println("Searching for the task");
         System.out.println("Enter the name of the task: ");
         String name = scanner.nextLine();
         if (name.isEmpty()){
             System.err.println("Task name is required");
-            return;
         }
         try{
             Task task = taskService.findByName(name);
@@ -38,5 +37,6 @@ public class FindTaskByNameCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to find");
         }
+        return true;
     }
 }

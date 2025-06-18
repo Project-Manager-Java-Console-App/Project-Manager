@@ -18,7 +18,7 @@ public class LoginCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         System.out.print("Username:");
         String username = scanner.nextLine();
@@ -33,7 +33,8 @@ public class LoginCommand implements Command {
             SessionManager.login(user);
             System.out.println("Login complete. Welcome " + username);
         }catch (SQLException e){
-            throw new RuntimeException();
+            System.err.println(e.getMessage());
         }
+        return true;
     }
 }

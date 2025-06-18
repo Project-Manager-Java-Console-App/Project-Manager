@@ -16,11 +16,11 @@ public class DisplayAllProjectsUserAddedCommand implements Command {
     }
 
     @Override
-    public void execute()  {
+    public boolean execute()  {
         Users user = SessionManager.getCurrentUser();
         if (user == null){
             System.err.println("User is required");
-            return;
+            return true;
         }
         System.out.println("Displaying all projects in which the user: " + user.getUsername()+" is added.");
 
@@ -37,5 +37,6 @@ public class DisplayAllProjectsUserAddedCommand implements Command {
         }catch (UserIdNotFound e){
             throw new UserIdNotFound();
         }
+        return true;
     }
 }

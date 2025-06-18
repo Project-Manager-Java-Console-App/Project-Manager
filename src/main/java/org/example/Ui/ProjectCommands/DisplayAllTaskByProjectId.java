@@ -18,11 +18,11 @@ public class DisplayAllTaskByProjectId implements Command {
 
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Project project = SessionManager.getCurrentProject();
         if (project==null){
             System.err.println("Project is required");
-            return;
+            return true;
         }
         System.out.println("Displaying All Tasks from"+project.getName());
         try {
@@ -33,5 +33,6 @@ public class DisplayAllTaskByProjectId implements Command {
         }catch (Exception e){
             System.err.println("Failed to display all tasks from project: "+project.getName());
         }
+        return true;
     }
 }

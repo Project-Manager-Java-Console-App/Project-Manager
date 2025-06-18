@@ -17,12 +17,12 @@ public class UpdateTaskCommand implements Command {
         this.taskService = taskService;
     }
     @Override
-    public void execute() {
+    public boolean execute() {
         scanner.nextLine();
         Task task = SessionManager.getCurrentTask();
         if (task==null){
             System.err.println("Task is required");
-            return;
+            return true;
         }
         System.out.println("Enter new name: ");
         String name = scanner.nextLine();
@@ -32,7 +32,7 @@ public class UpdateTaskCommand implements Command {
         Status newStatus =enterStatus(scanner);
         if(name.isEmpty()||description.isEmpty()||newStatus==null){
             System.err.println("Name, description and status is required");
-            return;
+            return true;
         }
 
         try{
@@ -42,5 +42,6 @@ public class UpdateTaskCommand implements Command {
             System.err.println("Failed to update");
         }
 
+        return true;
     }
 }

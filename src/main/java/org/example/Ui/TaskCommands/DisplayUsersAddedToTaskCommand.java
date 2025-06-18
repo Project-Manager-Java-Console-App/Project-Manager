@@ -15,11 +15,11 @@ public class DisplayUsersAddedToTaskCommand implements Command {
     }
 
     @Override
-    public void execute() {
+    public boolean execute() {
         Task task = SessionManager.getCurrentTask();
         if (task == null){
             System.err.println("Task is required");
-            return;
+            return true;
         }
         System.out.println("Displaying users added to "+ task.getName());
 
@@ -34,5 +34,6 @@ public class DisplayUsersAddedToTaskCommand implements Command {
         }catch (Exception e){
             System.err.println("Failed to display users");
         }
+        return true;
     }
 }
