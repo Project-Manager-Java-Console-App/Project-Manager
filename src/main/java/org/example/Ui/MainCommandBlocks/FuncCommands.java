@@ -1,6 +1,6 @@
 package org.example.Ui.MainCommandBlocks;
 
-import org.example.Service.*;
+
 import org.example.Ui.AppContext;
 import org.example.Ui.AuthCommands.ExitCommand;
 import org.example.Ui.AuthCommands.LogOutCommand;
@@ -8,11 +8,8 @@ import org.example.Ui.Command;
 import org.example.Ui.ProjectCommands.*;
 import org.example.Ui.TaskCommands.*;
 import org.example.Ui.UserCommands.*;
-import org.example.dataBase.DatabaseUtils;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 public class FuncCommands implements CommandProvider {
 
