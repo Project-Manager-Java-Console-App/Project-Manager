@@ -19,8 +19,7 @@ public class DisplayUsersAddedToTaskCommand implements Command {
     public boolean execute() {
         Task task = SessionManager.getCurrentTask();
         if (task == null){
-            System.err.println("Task is required");
-            return true;
+            throw new IllegalArgumentException("Task is null");
         }
         System.out.println("Displaying users added to "+ task.getName());
 

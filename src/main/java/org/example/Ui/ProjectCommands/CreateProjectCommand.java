@@ -23,7 +23,7 @@ public class CreateProjectCommand implements Command {
         System.out.print("Enter project description: ");
         String projectDescription = scanner.nextLine();
         if(projectName.isEmpty() || projectDescription.isEmpty()){
-            System.err.println("Project name or description is empty");
+            throw new RuntimeException("Project name or description is empty");
         }
 
         try{

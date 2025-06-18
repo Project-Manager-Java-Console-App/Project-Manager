@@ -25,7 +25,7 @@ public class FindByIdTaskCommand implements Command {
         System.out.println("Enter task id: ");
         int id = scanner.nextInt();
         if (id==0){
-            System.err.println("Task id is required");
+            throw new IllegalArgumentException("Task id is null");
         }
 
         try{

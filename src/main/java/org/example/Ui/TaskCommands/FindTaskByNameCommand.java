@@ -23,7 +23,7 @@ public class FindTaskByNameCommand implements Command {
         System.out.println("Enter the name of the task: ");
         String name = scanner.nextLine();
         if (name.isEmpty()){
-            System.err.println("Task name is required");
+            throw new IllegalArgumentException("Task name is empty");
         }
         try{
             Task task = taskService.findByName(name);
