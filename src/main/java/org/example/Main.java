@@ -9,7 +9,6 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args)  {
-
         try {
             AppContext context = new AppContext();
             int choice;
@@ -22,10 +21,9 @@ public class Main {
                 running = command.execute();
             }
         }catch (Exception e) {
-            System.err.println(e.getMessage());
+            throw new RuntimeException(e.getMessage());
         }
     }
-
 
     private static CommandProvider commandProvider(AppContext context) {
         if(!SessionManager.isLoggedIn()) {

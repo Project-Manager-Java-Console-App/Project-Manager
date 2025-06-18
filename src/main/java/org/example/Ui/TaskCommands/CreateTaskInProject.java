@@ -4,8 +4,6 @@ import org.example.Exceptions.TaskNotFound;
 import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.*;
-
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Scanner;
 

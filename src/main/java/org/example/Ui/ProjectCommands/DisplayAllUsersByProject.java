@@ -1,13 +1,10 @@
 package org.example.Ui.ProjectCommands;
 
-import org.example.Exceptions.ProjectIdNotFound;
 import org.example.Exceptions.UserIdNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
-
-import java.sql.SQLException;
 import java.util.List;
 
 public class DisplayAllUsersByProject implements Command {

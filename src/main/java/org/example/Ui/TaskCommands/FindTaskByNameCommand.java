@@ -1,13 +1,10 @@
 package org.example.Ui.TaskCommands;
 
 import org.example.Exceptions.TaskNotFound;
-import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Task;
-
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FindTaskByNameCommand implements Command {

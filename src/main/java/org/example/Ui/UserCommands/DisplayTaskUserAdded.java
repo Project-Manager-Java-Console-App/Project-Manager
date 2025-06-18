@@ -1,6 +1,5 @@
 package org.example.Ui.UserCommands;
 
-import org.example.Exceptions.TaskNotFound;
 import org.example.Exceptions.UserNotFound;
 import org.example.Service.TaskUserService;
 import org.example.Ui.Command;

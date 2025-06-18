@@ -4,9 +4,6 @@ import org.example.Service.ProjectService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
-
-import java.awt.print.PrinterAbortException;
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class CreateProjectCommand implements Command {

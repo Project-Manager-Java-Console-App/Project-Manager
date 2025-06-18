@@ -1,6 +1,5 @@
 package org.example.Ui.ProjectCommands;
 
-import org.example.Exceptions.UserIdNotFound;
 import org.example.Exceptions.UserNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Service.UserService;
