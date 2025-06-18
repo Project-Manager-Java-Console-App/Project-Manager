@@ -3,10 +3,7 @@ package org.example;
 import org.example.Ui.AppContext;
 import org.example.Ui.Command;
 import org.example.Ui.DisplayChoiceMenu;
-import org.example.Ui.MainCommandBlocks.AfterLoginCommands;
-import org.example.Ui.MainCommandBlocks.AuthCommandFactory;
-import org.example.Ui.MainCommandBlocks.CommandProvider;
-import org.example.Ui.MainCommandBlocks.FuncCommands;
+import org.example.Ui.MainCommandBlocks.*;
 import org.example.model.SessionManager;
 import java.util.Scanner;
 
@@ -30,27 +27,17 @@ public class Main {
     }
 
 
-
     private static CommandProvider commandProvider(AppContext context) {
         if(!SessionManager.isLoggedIn()) {
             DisplayChoiceMenu.DisplayAuthMenu();
-            return new AuthCommandFactory( context.userService, context.factory,context.scanner);
+            return new AuthCommandFactory(context);
         }else if(SessionManager.getCurrentProject() == null) {
             DisplayChoiceMenu.DisplayAfterLoginMenu();
-            return new AfterLoginCommands(context.projectService,context.factory,context.scanner);
+            return new AfterLoginCommands(context);
         }else {
             DisplayChoiceMenu.DisplayFuncMenu();
-            return new FuncCommands(
-                    context.projectService,
-                    context.taskService,
-                    context.userService,
-                    context.projectUserService,
-                    context.taskUserService,
-                    context.factory,
-                    context.scanner
-            );
+            return new FuncCommands(context);
         }
-
     }
 
     private static int askUserChoice(Scanner scanner){
