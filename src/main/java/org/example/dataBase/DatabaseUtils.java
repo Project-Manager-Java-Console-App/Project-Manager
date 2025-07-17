@@ -7,21 +7,29 @@ import java.sql.SQLException;
 
 public class DatabaseUtils implements Database {
 
-    private static final String url = "jdbc:mysql://localhost:3306/project_manager";
-    private static final String user = "root";
-    private static final String password = "P020373p";
+    private static DatabaseUtils instance;
 
-
-    private final Connection conn;
+    private Connection conn;
 
     public DatabaseUtils() throws SQLException {
-        try{
+        connect();
+    }
+
+    private void connect() throws SQLException {
+        String url = System.getenv("DB_URL");
+        String user = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
+        if (url == null || user == null || password == null) {
+            throw new SQLException("Environment variables DB_URL, DB_USER, or DB_PASSWORD not set.");
+        }
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, user, password);
-        }catch (ClassNotFoundException e){
-            throw new SQLException("JDBC driver not found",e);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("JDBC driver not found", e);
         }
     }
+
     @Override
     public Connection getConnection() {
         return conn;
@@ -29,8 +37,17 @@ public class DatabaseUtils implements Database {
 
     @Override
     public void closeConnection() throws SQLException {
-        if (conn != null&& !conn.isClosed()) {
+        if (conn != null && !conn.isClosed()) {
             conn.close();
         }
+    }
+
+    public static DatabaseUtils getInstance() throws SQLException {
+        if (instance == null) {
+            instance = new DatabaseUtils();
+        } else if (instance.conn == null || instance.conn.isClosed() || !instance.conn.isValid(2)) {
+            instance.connect();
+        }
+        return instance;
     }
 }
