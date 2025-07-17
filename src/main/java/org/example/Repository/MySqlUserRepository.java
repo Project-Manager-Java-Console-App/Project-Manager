@@ -13,10 +13,10 @@ public class MySqlUserRepository implements UserRepository {
     }
 
     @Override
-    public Users save(Users user) throws SQLException {
+    public Users save(Users user) {
         String query = "Insert into users(username,password,salt) values(?,?,?)";
         try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            ps.setString(1, user.getUsername());
+            ps.setString(1, user.getName());
             ps.setBytes(2, user.getPasswordHash());
             ps.setBytes(3, user.getSalt());
 
@@ -30,36 +30,44 @@ public class MySqlUserRepository implements UserRepository {
                 }
             }
             return user;
-        }catch (SQLException e) {
-            throw new SQLException("Error while saving user: ", e);
+        } catch (SQLException e) {
+            System.err.println("Failed to save user");
         }
+        return null;
     }
 
     @Override
-    public boolean delete(Users user) throws SQLException {
+    public boolean delete(Users user) {
         String query = "Delete from users where id=?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, user.getId());
             return ps.executeUpdate() > 0;
-        }catch (SQLException e){
-            throw new SQLException("Error while deleting user: ", e);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
+        return false;
     }
 
     @Override
-    public boolean update(String username,int user_id) throws SQLException {
-        String sql = "Update users set username=? where id=?";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, username);
-            ps.setInt(2, user_id);
-            return ps.executeUpdate() > 0;
-        }catch (SQLException e){
-            throw new SQLException("Error while updating user: ", e);
+    public Users update(Users users, int id) {
+
+        String sql = "Update users set username=? where id = ?";
+        try (PreparedStatement statement = conn.prepareStatement(sql)) {
+            statement.setString(1, users.getName());
+            statement.setInt(2, id);
+            int rows = statement.executeUpdate();
+            if (rows == 0) {
+                System.err.println("Failed to update user");
+            }
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
+        return users;
     }
 
+
     @Override
-    public Users findByName(String name)throws SQLException{
+    public Users findByName(String name) {
         String query = "Select * from users where username=?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setString(1, name);
@@ -70,13 +78,14 @@ public class MySqlUserRepository implements UserRepository {
                 u.setId(id);
                 return u;
             }
-        }catch (SQLException e){
-            throw new SQLException(name);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
+        return null;
     }
 
     @Override
-    public Users findById(Integer id) throws SQLException {
+    public Users findById(Integer id) {
         String query = "Select username from users where id=?";
         try (PreparedStatement ps = conn.prepareStatement(query)) {
             ps.setInt(1, id);
@@ -87,14 +96,14 @@ public class MySqlUserRepository implements UserRepository {
                 u.setId(id);
                 return u;
             }
-        }catch (SQLException e){
-            throw new SQLException("Error while finding user by ID: ", e);
+        } catch (SQLException e) {
+            System.err.println(e.getMessage());
         }
-
+        return null;
     }
 
     @Override
-    public Users authenticate(String username, char[] password) throws SQLException {
+    public Users authenticate(String username, char[] password) {
         String sql = "SELECT id,password,salt from users where username = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
@@ -104,8 +113,8 @@ public class MySqlUserRepository implements UserRepository {
                 if (!rs.next()) return null;
 
                 int id = rs.getInt("id");
-                byte[] hash  = rs.getBytes("password");
-                byte[] salt  = rs.getBytes("salt");
+                byte[] hash = rs.getBytes("password");
+                byte[] salt = rs.getBytes("salt");
                 byte[] attempt = PasswordUtils.hash(password, salt);
 
                 if (PasswordUtils.slowEquals(hash, attempt)) {
@@ -116,6 +125,9 @@ public class MySqlUserRepository implements UserRepository {
                     return null;
                 }
             }
+        } catch (SQLException e) {
+            System.err.println("Failed to authenticate");
         }
+        return null;
     }
 }

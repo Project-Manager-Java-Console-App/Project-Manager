@@ -7,20 +7,24 @@ import org.example.Ui.AuthCommands.RegisterCommand;
 import org.example.Ui.Command;
 
 
-public class AuthCommandFactory implements CommandProvider{
+public class AuthCommandFactory implements CommandProvider {
 
-        private final AppContext appContext;
-        public AuthCommandFactory(AppContext appContext) {
-            this.appContext = appContext;
-        }
+    private final AppContext appContext;
+
+    public AuthCommandFactory(AppContext appContext) {
+        this.appContext = appContext;
+    }
 
     @Override
     public Command getCommand(int choice) {
-        return switch (choice){
-            case 1 -> new RegisterCommand(appContext.userService, appContext.scanner);
-            case 2 -> new LoginCommand(appContext.userService, appContext.scanner);
+        return switch (choice) {
+            case 1 -> new RegisterCommand(appContext.sessionManager, appContext.userService, appContext.scanner);
+            case 2 -> new LoginCommand(appContext.sessionManager, appContext.userService, appContext.scanner);
             case 3 -> new ExitCommand(appContext.factory);
-            default -> () ->{System.out.println("Invalid choice");return true;};
+            default -> () -> {
+                System.out.println("Invalid choice");
+                return true;
+            };
         };
     }
 }

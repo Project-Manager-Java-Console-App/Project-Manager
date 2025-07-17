@@ -1,41 +1,38 @@
 package org.example.Ui.AuthCommands;
 
-import org.example.Exceptions.UserNotFound;
 import org.example.Service.UserService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class LoginCommand implements Command {
     private final UserService userService;
     private final Scanner scanner;
+    private final SessionManager sessionManager;
 
-    public LoginCommand(UserService userService, Scanner scanner) {
+    public LoginCommand(SessionManager sessionManager, UserService userService, Scanner scanner) {
         this.userService = userService;
         this.scanner = scanner;
+        this.sessionManager = sessionManager;
     }
 
     @Override
     public boolean execute() {
+
         scanner.nextLine();
         System.out.print("Username:");
         String username = scanner.nextLine();
         System.out.print("Password:");
         String password = scanner.nextLine();
 
-        try{
-            Users user = userService.loginUser(username,password.toCharArray());
-            if(user == null){
-                System.out.println("Invalid username or password");
-            }
-            SessionManager.login(user);
-            System.out.println("Login complete. Welcome " + username);
-        }catch (SQLException e){
-            throw new UserNotFound(e.getMessage());
+        Users user = userService.loginUser(username, password.toCharArray());
+        if (user == null) {
+            System.out.println("Invalid username or password");
         }
+        sessionManager.login(user);
+        System.out.println("Login complete. Welcome " + username);
         return true;
     }
 }

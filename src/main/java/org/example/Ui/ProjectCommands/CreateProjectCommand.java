@@ -4,15 +4,18 @@ import org.example.Service.ProjectService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
+
 import java.util.Scanner;
 
 public class CreateProjectCommand implements Command {
     private final ProjectService projectService;
     private final Scanner scanner;
+    private final SessionManager sessionManager;
 
-    public CreateProjectCommand(ProjectService projectService, Scanner scanner) {
+    public CreateProjectCommand(SessionManager sessionManager, ProjectService projectService, Scanner scanner) {
         this.projectService = projectService;
         this.scanner = scanner;
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -22,18 +25,15 @@ public class CreateProjectCommand implements Command {
         String projectName = scanner.nextLine();
         System.out.print("Enter project description: ");
         String projectDescription = scanner.nextLine();
-        if(projectName.isEmpty() || projectDescription.isEmpty()){
-            throw new RuntimeException("Project name or description is empty");
+        if (projectName.isEmpty() || projectDescription.isEmpty()) {
+            System.err.println("Project name or description is empty");
+            return true;
         }
 
-        try{
-            int userId = SessionManager.getCurrentUser().getId();
-            Project project = projectService.createProject(projectName, projectDescription, userId);
-            SessionManager.setCurrentProject(project);
-            System.out.println("Project created");
-        }catch (Exception e){
-           throw new RuntimeException(e.getMessage());
-        }
+        int userId = sessionManager.getCurrentUser().getId();
+        Project project = projectService.createProject(projectName, projectDescription, userId);
+        sessionManager.setCurrentProject(project);
+        System.out.println("Project created");
         return true;
     }
 }

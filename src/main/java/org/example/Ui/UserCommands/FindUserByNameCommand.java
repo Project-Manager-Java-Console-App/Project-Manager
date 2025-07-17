@@ -1,11 +1,9 @@
 package org.example.Ui.UserCommands;
 
-import org.example.Exceptions.UserNotFound;
 import org.example.Service.UserService;
 import org.example.Ui.Command;
 import org.example.model.Users;
 
-import java.sql.SQLException;
 import java.util.Scanner;
 
 public class FindUserByNameCommand implements Command {
@@ -18,25 +16,23 @@ public class FindUserByNameCommand implements Command {
     }
 
     @Override
-    public boolean execute()  {
+    public boolean execute() {
         scanner.nextLine();
         System.out.println("Finding user by name");
         System.out.println("Enter User username");
         String username = scanner.nextLine();
-        if (username.isEmpty()){
-            throw new IllegalArgumentException("username is empty");
+        if (username.isEmpty()) {
+            System.err.println("username is empty");
+            return true;
         }
 
-        try {
-            Users users = userService.findByName(username);
-            if (users == null){
-                throw new UserNotFound(username);
-            }
-            System.out.println("User found:");
-            System.out.println(users);
-        }catch (SQLException e){
-            throw new UserNotFound(username);
+        Users users = userService.findByName(username);
+        if (users == null) {
+            System.err.println("Failed to find user by username: " + username);
+            return true;
         }
+        System.out.println("User found:");
+        System.out.println(users);
         return true;
     }
 }

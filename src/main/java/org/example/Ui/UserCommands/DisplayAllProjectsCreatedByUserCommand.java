@@ -1,41 +1,43 @@
 package org.example.Ui.UserCommands;
 
-import org.example.Exceptions.UserIdNotFound;
-import org.example.Exceptions.UserNotFound;
 import org.example.Service.ProjectUserService;
 import org.example.Ui.Command;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
+
 import java.util.List;
 
-public class DisplayAllProjectsCreatedByUser implements Command {
+public class DisplayAllProjectsCreatedByUserCommand implements Command {
     private final ProjectUserService projectUserService;
+    private final SessionManager sessionManager;
 
-    public DisplayAllProjectsCreatedByUser(ProjectUserService projectUserService) {
+    public DisplayAllProjectsCreatedByUserCommand(SessionManager sessionManager, ProjectUserService projectUserService) {
         this.projectUserService = projectUserService;
+        this.sessionManager = sessionManager;
     }
 
     @Override
-    public boolean execute()  {
-        Users users = SessionManager.getCurrentUser();
-        if (users == null){
-            throw new UserNotFound("User is empty");
+    public boolean execute() {
+        Users users = sessionManager.getCurrentUser();
+        if (users == null) {
+            System.err.println("Users is null");
+            return true;
         }
         System.out.println("Displaying all projects created by user: " + users);
 
-        try{
+        try {
             List<Project> project_ids = projectUserService.getAllProjectsCreatedByUser(users.getId());
             if (project_ids.isEmpty()) {
                 System.out.println("No projects assigned to user: " + users);
-            }else {
+            } else {
                 System.out.println("Projects ids: ");
                 for (Project project : project_ids) {
                     System.out.println(project);
                 }
             }
-        }catch (Exception e){
-            throw new UserIdNotFound();
+        } catch (Exception e) {
+            System.err.println("Failed to display all projects created by user: " + e.getMessage());
         }
         return true;
     }

@@ -1,10 +1,9 @@
 package org.example.Service;
 
 import org.example.Auth.PasswordUtils;
-import org.example.Exceptions.UsernameAlreadyExistsException;
 import org.example.Repository.UserRepository;
 import org.example.model.Users;
-import java.sql.SQLException;
+
 
 public class UserService {
     private final UserRepository userRepository;
@@ -13,18 +12,20 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public Users registerUser(String username, String password) throws UsernameAlreadyExistsException, SQLException {
-        if(userRepository.findByName(username)!=null){
-            throw new UsernameAlreadyExistsException();
+    public Users registerUser(String username, String password) {
+        if (userRepository.findByName(username) != null) {
+            System.err.println("Username already exists");
+            return null;
         }
-        return userRepository.save(Users.registerNew(username,password));
+        return userRepository.save(Users.registerNew(username, password));
 
     }
 
-    public Users loginUser(String username, char[] password) throws SQLException {
+    public Users loginUser(String username, char[] password) {
         Users user = userRepository.authenticate(username, password);
-        if(user==null){
-            throw new IllegalArgumentException("User not found");
+        if (user == null) {
+            System.err.println("Invalid username or password");
+            return null;
         }
 
         byte[] salt = user.getSalt();
@@ -33,39 +34,44 @@ public class UserService {
         byte[] inputHash = PasswordUtils.hash(password, salt);
 
         if (!PasswordUtils.slowEquals(expectedHash, inputHash)) {
-            throw new IllegalArgumentException("Invalid username or password");
+            System.err.println("Invalid password");
+            return null;
         }
         return user;
     }
 
-    public boolean updateUser(String username,int user_id) throws SQLException{
+    public Users updateUser(Users username, int user_id) {
         Users user = userRepository.findById(user_id);
-        if(user==null){
-            throw new IllegalArgumentException("User not found");
+        if (user == null) {
+            System.err.println("Failed to update user");
+            return null;
         }
-        return userRepository.update(username,user_id);
+        return userRepository.update(username, user_id);
     }
 
-    public boolean deleteUser(Integer id) throws SQLException{
+    public boolean deleteUser(Integer id) {
         Users user = userRepository.findById(id);
-        if(user==null){
-            throw new IllegalArgumentException("User not found");
+        if (user == null) {
+            System.err.println("Failed to delete user");
+            return false;
         }
         return userRepository.delete(user);
     }
 
-    public Users findByName(String username) throws SQLException {
+    public Users findByName(String username) {
         Users user = userRepository.findByName(username);
-        if(user==null){
-            throw new IllegalArgumentException("User not found");
+        if (user == null) {
+            System.err.println("Failed to find user by name");
+            return null;
         }
         return user;
     }
 
-    public Users findById(Integer id) throws SQLException, UsernameAlreadyExistsException {
+    public Users findById(Integer id) {
         Users user = userRepository.findById(id);
-        if(user==null){
-            throw new IllegalArgumentException("User not found");
+        if (user == null) {
+            System.err.println("Failed to find user by id");
+            return null;
         }
         return user;
     }

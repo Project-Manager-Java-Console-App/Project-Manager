@@ -1,7 +1,5 @@
 package org.example.Repository;
 
-import org.example.Exceptions.ProjectIdNotFound;
-import org.example.Exceptions.UserIdNotFound;
 import org.example.model.Project;
 
 import java.sql.Connection;
@@ -19,90 +17,90 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
     public MySqlProjectUserRepository(Connection connection) {
         this.conn = connection;
     }
+
     @Override
-    public List<Integer> getUsersInProject(Integer projectId) throws ProjectIdNotFound {
+    public List<Integer> getUsersIn(Integer projectId) {
         String query = "SELECT user_id FROM user_project_assignment WHERE id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(query)){
-            stmt.setInt(1, projectId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                List<Integer> users = new ArrayList<>();
-                while (rs.next()) {
-                    int id = rs.getInt("user_id");
-                    users.add(id);
-                }
-                return users;
-            }
-        }catch (SQLException e){
-            throw new ProjectIdNotFound();
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            return getIntegers(projectId, stmt);
+        } catch (SQLException e) {
+            System.err.println("Error while getting users in project: " + e.getMessage());
+            return null;
         }
 
     }
 
+    public static List<Integer> getIntegers(Integer projectId, PreparedStatement stmt) throws SQLException {
+        stmt.setInt(1, projectId);
+        try (ResultSet rs = stmt.executeQuery()) {
+            List<Integer> users = new ArrayList<>();
+            while (rs.next()) {
+                int id = rs.getInt("user_id");
+                users.add(id);
+            }
+            return users;
+        }
+    }
+
     @Override
-    public boolean removeUserFromProject(Integer projectId, Integer userId) throws SQLException {
+    public boolean delete(Integer projectId, Integer userId) {
         String query = "DELETE FROM user_project_assignment WHERE id = ? and user_id =?";
-        try(PreparedStatement stmt = conn.prepareStatement(query)){
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, projectId);
             stmt.setInt(2, userId);
             return stmt.executeUpdate() > 0;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("SQL error while deleting user to project: " + e.getMessage());
-            throw new SQLException("Cannot assign user to project. Check if IDs are valid.", e);
+            return false;
         }
     }
 
     @Override
-    public boolean addUserToProject(Integer projectId, Integer userId) throws SQLException {
+    public boolean save(Integer projectId, Integer userId) {
         String query = "INSERT INTO user_project_assignment (id, user_id, assigment_date) VALUES (?, ?,?)";
-        try (PreparedStatement stmt = conn.prepareStatement(query)){
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, projectId);
             stmt.setInt(2, userId);
             stmt.setObject(3, LocalDate.now());
 
             return stmt.executeUpdate() > 0;
-        }catch (SQLException e){
+        } catch (SQLException e) {
             System.err.println("SQL error while assigning user to project: " + e.getMessage());
-            throw new SQLException("Cannot assign user to project. Check if IDs are valid.", e);
+            return false;
         }
     }
 
     @Override
-    public List<Project> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound {
+    public List<Project> getAllProjectsCreatedByUser(Integer userId) {
         String query = "SELECT * FROM project WHERE created_by = ?";
-        try(PreparedStatement stmt = conn.prepareStatement(query)){
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setInt(1, userId);
             try (ResultSet rs = stmt.executeQuery()) {
-                List<Project> ids= new ArrayList<>();
+                List<Project> ids = new ArrayList<>();
                 while (rs.next()) {
                     int id = rs.getInt(1);
                     String name = rs.getString("project_name");
                     String description = rs.getString("description");
-                    Project pr = Project.create(name,description,userId);
+                    Project pr = Project.create(name, description, userId);
                     pr.setId(id);
                     ids.add(pr);
                 }
                 return ids;
             }
-        }catch (SQLException e){
-            throw new UserIdNotFound();
+        } catch (SQLException e) {
+            System.err.println("SQL error while getting projects created by user: " + e.getMessage());
+            return null;
         }
     }
 
     @Override
-    public List<Integer> getAllProjectsWhereUserIsAdded(Integer userId) throws UserIdNotFound {
+    public List<Integer> getAllAddedToUser(Integer userId) {
         String query = "SELECT id FROM user_project_assignment WHERE user_id = ?";
-        try (PreparedStatement stmt = conn.prepareStatement(query)){
-            stmt.setInt(1, userId);
-            try (ResultSet rs = stmt.executeQuery()) {
-                List<Integer> users = new ArrayList<>();
-                while (rs.next()) {
-                    int id = rs.getInt("user_id");
-                    users.add(id);
-                }
-                return users;
-            }
-        }catch (SQLException e){
-            throw new ProjectIdNotFound();
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            return getIntegers(userId, stmt);
+        } catch (SQLException e) {
+            System.err.println("SQL error while getting projects created by user: " + e.getMessage());
+            return null;
         }
     }
 }

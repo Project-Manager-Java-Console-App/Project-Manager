@@ -13,11 +13,12 @@ public class ExitCommand implements Command {
     }
 
     @Override
-    public boolean execute() throws SQLException {
+    public boolean execute() {
         try {
             dbUtils.closeConnection();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            System.err.println(e.getMessage());
+            return true;
         }
         System.out.println("Exiting...");
         return false;
