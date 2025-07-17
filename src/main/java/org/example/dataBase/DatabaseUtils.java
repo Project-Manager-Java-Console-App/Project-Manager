@@ -11,17 +11,17 @@ public class DatabaseUtils implements Database {
     private static final String user = "root";
     private static final String password = "P020373p";
 
-
     private final Connection conn;
 
     public DatabaseUtils() throws SQLException {
-        try{
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, user, password);
-        }catch (ClassNotFoundException e){
-            throw new SQLException("JDBC driver not found",e);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("JDBC driver not found", e);
         }
     }
+
     @Override
     public Connection getConnection() {
         return conn;
@@ -29,7 +29,7 @@ public class DatabaseUtils implements Database {
 
     @Override
     public void closeConnection() throws SQLException {
-        if (conn != null&& !conn.isClosed()) {
+        if (conn != null && !conn.isClosed()) {
             conn.close();
         }
     }
