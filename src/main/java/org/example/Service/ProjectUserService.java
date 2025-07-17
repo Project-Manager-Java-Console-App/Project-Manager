@@ -1,12 +1,8 @@
 package org.example.Service;
 
-import org.example.Exceptions.ProjectIdNotFound;
-import org.example.Exceptions.UserIdNotFound;
 import org.example.Repository.ProjectUserRepository;
 import org.example.model.Project;
 
-import java.security.InvalidParameterException;
-import java.sql.SQLException;
 import java.util.List;
 
 public class ProjectUserService {
@@ -16,38 +12,38 @@ public class ProjectUserService {
         this.projectUserRepository = projectUserRepository;
     }
 
-    public List<Integer> getUsersAssignedToProject(Integer projectId) throws UserIdNotFound {
+    public List<Integer> getUsersAssignedToProject(Integer projectId) {
         if (projectId == null) {
-            throw new ProjectIdNotFound();
+            System.err.println("Invalid Project ID");
         }
-        return projectUserRepository.getUsersInProject(projectId);
+        return projectUserRepository.getUsersIn(projectId);
     }
 
-    public boolean removeUserFromProject(Integer projectId, Integer userId) throws UserIdNotFound, SQLException {
-        if (projectId == null||userId == null) {
-            throw new SQLException("Invalid ids");
+    public boolean removeUserFromProject(Integer projectId, Integer userId) {
+        if (projectId == null || userId == null) {
+            System.err.println("Invalid IDs");
         }
-        return projectUserRepository.removeUserFromProject(projectId, userId);
+        return projectUserRepository.delete(projectId, userId);
     }
 
-    public boolean addUserToProject(Integer projectId, Integer userId) throws UserIdNotFound, SQLException {
-        if (projectId == null||userId == null) {
-            throw new InvalidParameterException("Invalid ids");
+    public boolean addUserToProject(Integer projectId, Integer userId) {
+        if (projectId == null || userId == null) {
+            System.err.println("Invalid IDs");
         }
-        return projectUserRepository.addUserToProject(projectId, userId);
+        return projectUserRepository.save(projectId, userId);
     }
 
-    public List<Project> getAllProjectsCreatedByUser(Integer userId) throws UserIdNotFound {
+    public List<Project> getAllProjectsCreatedByUser(Integer userId) {
         if (userId == null) {
-            throw new UserIdNotFound();
+            System.err.println("Invalid User ID");
         }
         return projectUserRepository.getAllProjectsCreatedByUser(userId);
     }
 
-    public List<Integer> getAllProjectsWhereUserIsAdded(Integer userId) throws UserIdNotFound {
+    public List<Integer> getAllProjectsWhereUserIsAdded(Integer userId) {
         if (userId == null) {
-            throw new UserIdNotFound();
+            System.err.println("Invalid User ID");
         }
-        return projectUserRepository.getAllProjectsWhereUserIsAdded(userId);
+        return projectUserRepository.getAllAddedToUser(userId);
     }
 }

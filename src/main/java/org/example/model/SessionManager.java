@@ -1,39 +1,53 @@
 package org.example.model;
 
+
 public class SessionManager {
 
-    private static Users currentUser;
-    private static Project currentProject;
-    private static Task currentTask;
+    private static SessionManager instance;
 
-    public static void login(Users user) {
+    private Users currentUser;
+    private Project currentProject;
+    private Task currentTask;
+
+    private SessionManager() {
+    }
+
+    public static SessionManager getInstance() {
+        if (instance == null) {
+            instance = new SessionManager();
+        }
+        return instance;
+    }
+
+    public void login(Users user) {
         currentUser = user;
     }
 
-    public static void logout() {
+    public void logout() {
         currentUser = null;
     }
 
-    public static boolean isLoggedIn() {
+    public boolean isLoggedIn() {
         return currentUser != null;
     }
 
-    public static Users getCurrentUser() {
+    public Users getCurrentUser() {
         return currentUser;
     }
 
-    public static Project getCurrentProject() {
+    public Project getCurrentProject() {
         return currentProject;
     }
 
-    public static void setCurrentProject(Project project) {
+    public void setCurrentProject(Project project) {
         currentProject = project;
     }
 
-    public static Task getCurrentTask() {
+    public Task getCurrentTask() {
         return currentTask;
     }
-    public static void setCurrentTask(Task task) {
+
+    public void setCurrentTask(Task task) {
         currentTask = task;
     }
 }

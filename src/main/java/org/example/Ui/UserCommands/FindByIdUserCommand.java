@@ -1,6 +1,6 @@
 package org.example.Ui.UserCommands;
 
-import org.example.Exceptions.UserNotFound;
+
 import org.example.Service.UserService;
 import org.example.Ui.Command;
 import org.example.model.Users;
@@ -21,20 +21,23 @@ public class FindByIdUserCommand implements Command {
         scanner.nextLine();
         System.out.println("Searching for user by id");
         System.out.println("Enter id: ");
-        int id =scanner.nextInt();
-        if (id == -1){
-            throw new IllegalArgumentException("id is null");
+        int id = scanner.nextInt();
+        if (id == -1) {
+            System.err.println("id is null");
+            return true;
         }
 
         try {
             Users user = userService.findById(id);
             if (user == null) {
-                throw new UserNotFound("User not found");
+                System.err.println("User not found");
+                return true;
             }
             System.out.println("User found");
             System.out.println(user);
-        }catch (Exception e) {
-            throw new UserNotFound("User not found");
+        } catch (Exception e) {
+            System.err.println("User not found");
+            return true;
         }
         return true;
     }

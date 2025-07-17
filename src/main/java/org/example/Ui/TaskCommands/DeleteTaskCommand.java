@@ -1,6 +1,5 @@
 package org.example.Ui.TaskCommands;
 
-import org.example.Exceptions.UserNotFound;
 import org.example.Service.TaskService;
 import org.example.Ui.Command;
 import org.example.model.SessionManager;
@@ -13,38 +12,44 @@ public class DeleteTaskCommand implements Command {
 
     private final TaskService taskService;
     private final Scanner scanner;
+    private final SessionManager sessionManager;
 
-    public DeleteTaskCommand(TaskService taskService,Scanner scanner) {
+    public DeleteTaskCommand(SessionManager sessionManager, TaskService taskService, Scanner scanner) {
         this.taskService = taskService;
         this.scanner = scanner;
+        this.sessionManager = sessionManager;
     }
 
     @Override
     public boolean execute() {
         scanner.nextLine();
-        Task task = SessionManager.getCurrentTask();
-        if(task==null){
-            throw new UserNotFound("Task not found");
+        Task task = sessionManager.getCurrentTask();
+        if (task == null) {
+            System.err.println(" task is null");
+            return true;
         }
-        System.out.println("Deleting task "+task.getName());
-        System.out.println("Do you want to delete the task "+task.getName()+ "(Y/N)");
+        System.out.println("Deleting task " + task.getName());
+        System.out.println("Do you want to delete the task " + task.getName() + "(Y/N)");
         String answer = scanner.nextLine();
-        if (answer.isEmpty()){
-            throw new IllegalArgumentException("answer cannot be empty");
+        if (answer.isEmpty()) {
+            System.err.println("Answer can't be empty");
+            return true;
         }
-        try{
+        try {
             if (answer.equals("Y")) {
                 boolean deleted = taskService.delete(task);
                 if (!deleted) {
-                    throw new RuntimeException("Failed to delete task");
+                    System.err.println("Task could not be deleted");
+                    return true;
                 }
                 System.out.println("Task deleted successfully");
-                SessionManager.setCurrentTask(null);
-            }else if (answer.equals("N")) {
+                sessionManager.setCurrentTask(null);
+            } else if (answer.equals("N")) {
                 System.out.println("Task is not deleted.");
             }
-        }catch (SQLException e){
-            throw new RuntimeException("Failed to delete task");
+        } catch (SQLException e) {
+            System.err.println("Error while deleting task " + e.getMessage());
+
         }
         return true;
     }

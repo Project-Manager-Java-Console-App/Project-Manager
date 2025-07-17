@@ -13,31 +13,35 @@ public class TaskUserService {
         this.taskUserRepository = taskUserRepository;
     }
 
-    public List<Integer> getUsersInTask(int taskId) throws SQLException {
+    public List<Integer> getUsersInTask(int taskId) {
         if (taskId < 1) {
-            throw new SQLException("Invalid task id");
+            System.err.println("Invalid task id");
+            return null;
         }
-        return taskUserRepository.getUsersInTask(taskId);
+        return taskUserRepository.getUsersIn(taskId);
     }
 
-    public boolean removeUserFromTask(int taskId, int userId) throws SQLException {
-        if (taskId < 1||userId < 1) {
-            throw new SQLException("Invalid ids");
+    public boolean removeUserFromTask(int taskId, int userId) {
+        if (taskId < 1 || userId < 1) {
+            System.err.println("Invalid ids");
+            return false;
         }
-        return taskUserRepository.removeUserFromTask(taskId, userId);
+        return taskUserRepository.delete(taskId, userId);
     }
 
     public boolean addUserToTask(int taskId, int userId) throws SQLException {
-        if (taskId < 1||userId < 1) {
-            throw new SQLException("Invalid ids");
+        if (taskId < 1 || userId < 1) {
+            System.err.println("Invalid ids");
+            return false;
         }
-        return taskUserRepository.addUserToTask(taskId, userId);
+        return taskUserRepository.save(taskId, userId);
     }
 
-    public List<Integer> getAllTaskAssignedToUser(int userId) throws SQLException {
+    public List<Integer> getAllTaskAssignedToUser(int userId) {
         if (userId < 1) {
-            throw new SQLException("Invalid ids");
+            System.err.println("Invalid user id");
+            return null;
         }
-        return taskUserRepository.getAllTasksAssignedToUser(userId);
+        return taskUserRepository.getAllAddedToUser(userId);
     }
 }

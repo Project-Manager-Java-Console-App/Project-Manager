@@ -1,6 +1,5 @@
 package org.example.Ui.TaskCommands;
 
-import org.example.Exceptions.UserNotFound;
 import org.example.Service.TaskUserService;
 import org.example.Service.UserService;
 import org.example.Ui.Command;
@@ -15,40 +14,41 @@ public class AddingUserToTaskCommand implements Command {
     private final TaskUserService taskUserService;
     private final UserService userService;
     private final Scanner scanner;
+    private final SessionManager sessionManager;
 
-    public AddingUserToTaskCommand(TaskUserService taskUserService,UserService userService, Scanner scanner) {
+    public AddingUserToTaskCommand(SessionManager sessionManager, TaskUserService taskUserService, UserService userService, Scanner scanner) {
         this.taskUserService = taskUserService;
         this.userService = userService;
         this.scanner = scanner;
+        this.sessionManager = sessionManager;
     }
 
     @Override
     public boolean execute() {
         scanner.nextLine();
-        Task task = SessionManager.getCurrentTask();
-        if (task == null){
+        Task task = sessionManager.getCurrentTask();
+        if (task == null) {
             System.err.println("Task is required");
             return true;
         }
-        System.out.println("Adding user to "+task.getName());
+        System.out.println("Adding user to " + task.getName());
         System.out.println("Enter username of User you want to add: ");
         String username = scanner.nextLine();
-        if (username.isEmpty()){
+        if (username.isEmpty()) {
             System.err.println("Username is required");
         }
 
-        try{
+        try {
             Users users = userService.findByName(username);
-            if(users == null){
-                throw new UserNotFound(username);
+            if (users == null) {
+                System.err.println("User not found");
+                return true;
             }
-            boolean addedUser = taskUserService.addUserToTask(task.getId(),users.getId());
-            if(!addedUser){
+            boolean addedUser = taskUserService.addUserToTask(task.getId(), users.getId());
+            if (!addedUser) {
                 System.err.println("Failed to add user");
             }
-        }catch (UserNotFound e){
-           throw new UserNotFound(username);
-        }catch (SQLException e){
+        } catch (SQLException e) {
             throw new RuntimeException("Database connection error");
         }
         return true;

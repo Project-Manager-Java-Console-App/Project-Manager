@@ -7,12 +7,12 @@ import org.example.model.SessionManager;
 
 import java.util.Scanner;
 
-public class FindByIdProjectCommand implements Command {
+public class FindByNameProjectCommand implements Command {
     private final ProjectService projectService;
     private final Scanner scanner;
     private final SessionManager sessionManager;
 
-    public FindByIdProjectCommand(SessionManager sessionManager, ProjectService projectService, Scanner scanner) {
+    public FindByNameProjectCommand(SessionManager sessionManager, ProjectService projectService, Scanner scanner) {
         this.projectService = projectService;
         this.scanner = scanner;
         this.sessionManager = sessionManager;
@@ -21,21 +21,18 @@ public class FindByIdProjectCommand implements Command {
     @Override
     public boolean execute() {
         scanner.nextLine();
-        System.out.println("Finding Project by ID");
-        System.out.println("Enter Project ID");
-        int id = scanner.nextInt();
-        if (id == 0) {
-            System.err.println("Project ID is required");
+        System.out.println("Searched project name: ");
+        String name = scanner.nextLine();
+        if (name.isEmpty()) {
+            System.err.println("Project name is required");
         }
 
-        Project project = projectService.findById(id);
+        Project project = projectService.findProjectByName(name);
         if (project == null) {
-            System.err.println("Project not found");
-            return true;
+            System.out.println("Project not found");
         }
         sessionManager.setCurrentProject(project);
-        System.out.println("Project found");
-        System.out.println(project);
+        System.out.println("Project found\n" + project);
         return true;
     }
 }
