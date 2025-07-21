@@ -13,7 +13,7 @@ public class DatabaseUtils implements Database {
     private static DatabaseUtils instance;
 
     private Connection conn;
-    private final Logger logger = LogManager.getLogger(DatabaseUtils.class);
+    private static final Logger logger = LogManager.getLogger(DatabaseUtils.class);
 
     public DatabaseUtils() throws SQLException {
         connect();
@@ -47,6 +47,7 @@ public class DatabaseUtils implements Database {
     public void closeConnection() throws SQLException {
         if (conn != null && !conn.isClosed()) {
             conn.close();
+            logger.info("Closing database connection!");
         }
     }
 
@@ -56,6 +57,7 @@ public class DatabaseUtils implements Database {
         } else if (instance.conn == null || instance.conn.isClosed() || !instance.conn.isValid(2)) {
             instance.connect();
         }
+        logger.info("Reconnecting database connection...");
         return instance;
     }
 }
