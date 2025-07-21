@@ -37,7 +37,6 @@ public class AppContext {
         this.taskRepository = new MySqlTaskRepository(connection);
         this.taskUserRepository = new MySqlTaskUserRepository(connection);
         this.userRepository = new MySqlUserRepository(connection);
-
         this.projectService = new ProjectService(sessionManager, projectRepository, taskRepository);
         this.taskService = new TaskService(taskRepository);
         this.projectUserService = new ProjectUserService(projectUserRepository);

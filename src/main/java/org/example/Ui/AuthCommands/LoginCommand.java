@@ -22,12 +22,12 @@ public class LoginCommand implements Command {
     public boolean execute() {
 
         scanner.nextLine();
-        System.out.print("Username:");
+        System.out.print("Username: ");
         String username = scanner.nextLine();
-        System.out.print("Password:");
+        System.out.print("Password: ");
         String password = scanner.nextLine();
 
-        Users user = userService.loginUser(username, password.toCharArray());
+        Users user = userService.loginUser(username, password);
         if (user == null) {
             System.out.println("Invalid username or password");
         }

@@ -6,13 +6,13 @@ import org.example.Auth.PasswordUtils;
 
 public class Users extends AbstractModel {
 
-    private final byte[] passwordHash;
-    private final byte[] salt;
+    private final String passwordHash;
 
-    private Users(String username, byte[] passwordHash, byte[] salt) {
+
+    private Users(String username, String passwordHash) {
         this.name = username;
         this.passwordHash = passwordHash;
-        this.salt = salt;
+
     }
 
     public static Users registerNew(String username, String passwordHash) {
@@ -20,26 +20,22 @@ public class Users extends AbstractModel {
             System.err.println("Username and password hash are mandatory");
             return null;
         }
-        byte[] saltBytes = PasswordUtils.generateSalt();
-        byte[] hashBytes = PasswordUtils.hash(passwordHash.toCharArray(), saltBytes);
 
-        return new Users(username, hashBytes, saltBytes);
+        String hashBytes = PasswordUtils.hash(passwordHash);
+
+        return new Users(username, hashBytes);
     }
 
     public static Users createUser(String username) {
-        return new Users(username, null, null);
+        return new Users(username, null);
     }
 
-    public static Users loginUser(String username, byte[] passwordHash, byte[] salt) {
-        return new Users(username, passwordHash, salt);
+    public static Users loginUser(String username, String passwordHash) {
+        return new Users(username, passwordHash);
     }
 
-    public byte[] getPasswordHash() {
+    public String getPasswordHash() {
         return passwordHash;
-    }
-
-    public byte[] getSalt() {
-        return salt;
     }
 
     public void setId(int id) {

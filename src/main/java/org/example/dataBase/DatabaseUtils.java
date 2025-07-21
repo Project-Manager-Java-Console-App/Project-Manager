@@ -1,5 +1,8 @@
 package org.example.dataBase;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -10,6 +13,7 @@ public class DatabaseUtils implements Database {
     private static DatabaseUtils instance;
 
     private Connection conn;
+    private final Logger logger = LogManager.getLogger(DatabaseUtils.class);
 
     public DatabaseUtils() throws SQLException {
         connect();
@@ -20,14 +24,18 @@ public class DatabaseUtils implements Database {
         String user = System.getenv("DB_USER");
         String password = System.getenv("DB_PASSWORD");
         if (url == null || user == null || password == null) {
+            logger.fatal("Invalid details in Database URL , User and Password are null!");
             throw new SQLException("Environment variables DB_URL, DB_USER, or DB_PASSWORD not set.");
         }
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             conn = DriverManager.getConnection(url, user, password);
+            logger.info("Database connection established!");
         } catch (ClassNotFoundException e) {
+            logger.error("Failed to connect to database", e);
             throw new SQLException("JDBC driver not found", e);
         }
+
     }
 
     @Override

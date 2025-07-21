@@ -1,5 +1,8 @@
 package org.example.Service;
 
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.Auth.PasswordUtils;
 import org.example.Repository.UserRepository;
 import org.example.model.Users;
@@ -7,6 +10,7 @@ import org.example.model.Users;
 
 public class UserService {
     private final UserRepository userRepository;
+    private final Logger logger = LogManager.getLogger(UserService.class);
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -15,28 +19,29 @@ public class UserService {
     public Users registerUser(String username, String password) {
         if (userRepository.findByName(username) != null) {
             System.err.println("Username already exists");
+            logger.error("Username '{}' already exists", username);
             return null;
         }
+        logger.info("Registering new user");
         return userRepository.save(Users.registerNew(username, password));
 
     }
 
-    public Users loginUser(String username, char[] password) {
+    public Users loginUser(String username, String password) {
         Users user = userRepository.authenticate(username, password);
         if (user == null) {
             System.err.println("Invalid username or password");
+            logger.error("Invalid username or password");
             return null;
         }
 
-        byte[] salt = user.getSalt();
-        byte[] expectedHash = user.getPasswordHash();
-
-        byte[] inputHash = PasswordUtils.hash(password, salt);
-
-        if (!PasswordUtils.slowEquals(expectedHash, inputHash)) {
-            System.err.println("Invalid password");
+        String expectedHash = user.getPasswordHash();
+        if (!PasswordUtils.slowEquals(password, expectedHash)) {
+            System.err.println("Invalid username or password");
+            logger.error("Invalid password");
             return null;
         }
+        logger.info("Logging user");
         return user;
     }
 
@@ -44,8 +49,10 @@ public class UserService {
         Users user = userRepository.findById(user_id);
         if (user == null) {
             System.err.println("Failed to update user");
+            logger.error("Failed to update user. The user is not found by id and it is null!");
             return null;
         }
+        logger.info("Updating user");
         return userRepository.update(username, user_id);
     }
 
@@ -53,8 +60,10 @@ public class UserService {
         Users user = userRepository.findById(id);
         if (user == null) {
             System.err.println("Failed to delete user");
+            logger.error("Failed to delete user. The user is not found by id and it is null!");
             return false;
         }
+        logger.info("Deleting user");
         return userRepository.delete(user);
     }
 
@@ -62,8 +71,10 @@ public class UserService {
         Users user = userRepository.findByName(username);
         if (user == null) {
             System.err.println("Failed to find user by name");
+            logger.error("Failed to find user by name");
             return null;
         }
+        logger.info("Finding user by name");
         return user;
     }
 
@@ -71,8 +82,10 @@ public class UserService {
         Users user = userRepository.findById(id);
         if (user == null) {
             System.err.println("Failed to find user by id");
+            logger.error("Failed to find user by id");
             return null;
         }
+        logger.info("Finding user by id");
         return user;
     }
 }

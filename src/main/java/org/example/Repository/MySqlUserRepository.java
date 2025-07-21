@@ -14,11 +14,10 @@ public class MySqlUserRepository implements UserRepository {
 
     @Override
     public Users save(Users user) {
-        String query = "Insert into users(username,password,salt) values(?,?,?)";
+        String query = "Insert into users(username,password) values(?,?)";
         try (PreparedStatement ps = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
             ps.setString(1, user.getName());
-            ps.setBytes(2, user.getPasswordHash());
-            ps.setBytes(3, user.getSalt());
+            ps.setString(2, user.getPasswordHash());
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) {
@@ -103,8 +102,8 @@ public class MySqlUserRepository implements UserRepository {
     }
 
     @Override
-    public Users authenticate(String username, char[] password) {
-        String sql = "SELECT id,password,salt from users where username = ?";
+    public Users authenticate(String username, String password) {
+        String sql = "SELECT id,password from users where username = ?";
         try (PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, username);
@@ -113,12 +112,11 @@ public class MySqlUserRepository implements UserRepository {
                 if (!rs.next()) return null;
 
                 int id = rs.getInt("id");
-                byte[] hash = rs.getBytes("password");
-                byte[] salt = rs.getBytes("salt");
-                byte[] attempt = PasswordUtils.hash(password, salt);
+                String hash = rs.getString("password");
 
-                if (PasswordUtils.slowEquals(hash, attempt)) {
-                    Users u = Users.loginUser(username, hash, salt);
+
+                if (PasswordUtils.slowEquals(password, hash)) {
+                    Users u = Users.loginUser(username, hash);
                     u.setId(id);
                     return u;
                 } else {
