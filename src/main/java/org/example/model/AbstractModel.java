@@ -9,8 +9,6 @@ public abstract class AbstractModel {
     }
 
     public void setId(int id) {
-        if (this.id != 0)
-            System.err.println("Id has already been created");
         this.id = id;
     }
 

@@ -4,7 +4,6 @@ package org.example.model;
 public class SessionManager {
 
     private static SessionManager instance;
-
     private Users currentUser;
     private Project currentProject;
     private Task currentTask;

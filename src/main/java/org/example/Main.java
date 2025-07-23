@@ -1,12 +1,14 @@
 package org.example;
 
-import org.example.Ui.AppContext;
-import org.example.Ui.Command;
-import org.example.Ui.DisplayChoiceMenu;
-import org.example.Ui.MainCommandBlocks.AfterLoginCommands;
-import org.example.Ui.MainCommandBlocks.AuthCommandFactory;
-import org.example.Ui.MainCommandBlocks.CommandProvider;
-import org.example.Ui.MainCommandBlocks.FuncCommands;
+import org.example.dataBase.DatabaseManager;
+import org.example.model.SessionManager;
+import org.example.ui.AppContext;
+import org.example.ui.Command;
+import org.example.ui.DisplayChoiceMenu;
+import org.example.ui.mainCommandBlocks.AfterLoginCommands;
+import org.example.ui.mainCommandBlocks.AuthCommandFactory;
+import org.example.ui.mainCommandBlocks.CommandProvider;
+import org.example.ui.mainCommandBlocks.FuncCommands;
 
 import java.util.Scanner;
 
@@ -24,15 +26,16 @@ public class Main {
                 running = command.execute();
             }
         } catch (Exception e) {
+            DatabaseManager.getInstance().closeConnection();
             throw new RuntimeException(e.getMessage());
         }
     }
 
     private static CommandProvider commandProvider(AppContext context) {
-        if (!context.sessionManager.isLoggedIn()) {
+        if (!SessionManager.getInstance().isLoggedIn()) {
             DisplayChoiceMenu.DisplayAuthMenu();
             return new AuthCommandFactory(context);
-        } else if (context.sessionManager.getCurrentProject() == null) {
+        } else if (SessionManager.getInstance().getCurrentProject() == null) {
             DisplayChoiceMenu.DisplayAfterLoginMenu();
             return new AfterLoginCommands(context);
         } else {

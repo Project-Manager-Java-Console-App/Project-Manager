@@ -16,9 +16,6 @@ public class Project extends AbstractModel {
     }
 
     public static Project create(String name, String description, int createdByUserId) {
-        if (name == null || description == null || createdByUserId == 0)
-            throw new IllegalArgumentException("Name, description and createdByUserId are required!");
-
         return new Project(name, description, createdByUserId);
     }
 

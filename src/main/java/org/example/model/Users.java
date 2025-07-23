@@ -1,12 +1,11 @@
 package org.example.model;
 
-
-import org.example.Auth.PasswordUtils;
-
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class Users extends AbstractModel {
 
     private final String passwordHash;
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 
     private Users(String username, String passwordHash) {
@@ -16,13 +15,7 @@ public class Users extends AbstractModel {
     }
 
     public static Users registerNew(String username, String passwordHash) {
-        if (username == null || passwordHash == null) {
-            System.err.println("Username and password hash are mandatory");
-            return null;
-        }
-
-        String hashBytes = PasswordUtils.hash(passwordHash);
-
+        String hashBytes = passwordEncoder.encode(passwordHash);
         return new Users(username, hashBytes);
     }
 
@@ -36,10 +29,6 @@ public class Users extends AbstractModel {
 
     public String getPasswordHash() {
         return passwordHash;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String toString() {

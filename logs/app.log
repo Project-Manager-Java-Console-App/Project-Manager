@@ -1,4 +1,1 @@
-2025-07-21 15:40:35,785 [main] INFO  org.example.dataBase.DatabaseUtils - Database connection established!
-2025-07-21 15:40:35,810 [main] INFO  org.example.dataBase.DatabaseUtils - Database connection established!
-2025-07-21 15:40:47,030 [main] INFO  org.example.Service.UserService - Registering new user
-2025-07-21 15:41:24,767 [main] INFO  org.example.Service.ProjectService - Creating project
+2025-07-23 14:43:46,995 [main] INFO  org.example.dataBase.DatabaseManager - Database connection established!
