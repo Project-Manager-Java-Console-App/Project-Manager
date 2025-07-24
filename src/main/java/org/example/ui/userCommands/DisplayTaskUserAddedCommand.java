@@ -1,5 +1,7 @@
 package org.example.ui.userCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 import org.example.service.TaskUserService;
@@ -9,6 +11,7 @@ import java.util.List;
 
 public class DisplayTaskUserAddedCommand implements Command {
     private final TaskUserService taskUserService;
+    private final Logger logger = LogManager.getLogger(DisplayTaskUserAddedCommand.class);
 
 
     public DisplayTaskUserAddedCommand(TaskUserService taskUserService) {
@@ -19,7 +22,7 @@ public class DisplayTaskUserAddedCommand implements Command {
     public boolean execute() {
         Users user = SessionManager.getInstance().getCurrentUser();
         if (user == null) {
-            System.err.println("User is empty");
+            logger.error("User is empty");
             return true;
         }
         System.out.println("Displaying Task in which " + user.getName() + " is assigned!");

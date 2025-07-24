@@ -1,5 +1,7 @@
 package org.example.ui.userCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 import org.example.service.ProjectUserService;
@@ -9,6 +11,7 @@ import java.util.List;
 
 public class DisplayAllProjectsUserAddedCommand implements Command {
     private final ProjectUserService projectUserService;
+    private final Logger logger = LogManager.getLogger(DisplayAllProjectsUserAddedCommand.class);
 
     public DisplayAllProjectsUserAddedCommand(ProjectUserService projectUserService) {
         this.projectUserService = projectUserService;
@@ -18,7 +21,7 @@ public class DisplayAllProjectsUserAddedCommand implements Command {
     public boolean execute() {
         Users user = SessionManager.getInstance().getCurrentUser();
         if (user == null) {
-            System.err.println("User is empty");
+            logger.error("User is empty");
             return true;
         }
         System.out.println("Displaying all projects in which the user: " + user.getName() + " is added.");

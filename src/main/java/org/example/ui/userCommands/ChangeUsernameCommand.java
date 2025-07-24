@@ -1,5 +1,7 @@
 package org.example.ui.userCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.SessionManager;
 import org.example.model.Users;
 import org.example.service.UserService;
@@ -10,6 +12,7 @@ import java.util.Scanner;
 public class ChangeUsernameCommand implements Command {
     private final UserService userService;
     private final Scanner scanner;
+    private final Logger logger = LogManager.getLogger(ChangeUsernameCommand.class);
 
     public ChangeUsernameCommand(UserService userService, Scanner scanner) {
         this.userService = userService;
@@ -21,14 +24,14 @@ public class ChangeUsernameCommand implements Command {
         scanner.nextLine();
         Users users = SessionManager.getInstance().getCurrentUser();
         if (users == null) {
-            System.err.println("User is required");
+            logger.error("User is required");
             return true;
         }
         System.out.println("Changing username: ");
         System.out.println("Enter your new Username: ");
         String username = scanner.nextLine();
         if (username.isEmpty()) {
-            System.err.println("Username is required");
+            logger.error("Username is required");
             return true;
         }
 

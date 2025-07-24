@@ -1,5 +1,7 @@
 package org.example.repository.auxiliary;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.dataBase.DatabaseManager;
 import org.example.model.Project;
 
@@ -14,6 +16,7 @@ import java.util.List;
 
 public class MySqlProjectUserRepository implements ProjectUserRepository {
     private final Connection conn = DatabaseManager.getInstance().getConnection();
+    private final Logger logger = LogManager.getLogger(MySqlProjectUserRepository.class);
 
     @Override
     public List<Integer> getUsersIn(Integer projectId) {
@@ -21,21 +24,23 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             return getIntegers(projectId, stmt);
         } catch (SQLException e) {
-            System.err.println("Error while getting users in project: " + e.getMessage());
+            logger.error("Error while getting users in project: {}", e.getMessage());
             return null;
         }
-
     }
 
-    public static List<Integer> getIntegers(Integer projectId, PreparedStatement stmt) throws SQLException {
-        stmt.setInt(1, projectId);
+    public static List<Integer> getIntegers(Integer projectId, PreparedStatement stmt) {
+
         try (ResultSet rs = stmt.executeQuery()) {
+            stmt.setInt(1, projectId);
             List<Integer> users = new ArrayList<>();
             while (rs.next()) {
                 int id = rs.getInt("user_id");
                 users.add(id);
             }
             return users;
+        } catch (SQLException e) {
+            return null;
         }
     }
 
@@ -47,7 +52,7 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
             stmt.setInt(2, userId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("SQL error while deleting user to project: " + e.getMessage());
+            logger.error("SQL error while deleting user to project: {} ", e.getMessage());
             return false;
         }
     }
@@ -62,7 +67,7 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
 
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("SQL error while assigning user to project: " + e.getMessage());
+            logger.error("SQL error while assigning user to project: {} ", e.getMessage());
             return false;
         }
     }
@@ -85,7 +90,7 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
                 return ids;
             }
         } catch (SQLException e) {
-            System.err.println("SQL error while getting projects created by user: " + e.getMessage());
+            logger.error("SQL error while getting projects created by user:  {}", e.getMessage());
             return null;
         }
     }
@@ -96,7 +101,7 @@ public class MySqlProjectUserRepository implements ProjectUserRepository {
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             return getIntegers(userId, stmt);
         } catch (SQLException e) {
-            System.err.println("SQL error while getting projects created by user: " + e.getMessage());
+            logger.error("SQL error while getting projects added to user: {}", e.getMessage());
             return null;
         }
     }

@@ -1,1 +1,4 @@
-2025-07-23 14:43:46,995 [main] INFO  org.example.dataBase.DatabaseManager - Database connection established!
+2025-07-24 13:52:02,511 [main] INFO  org.example.dataBase.DatabaseManager - Database connection established!
+2025-07-24 13:52:14,186 [main] INFO  org.example.service.UserService - Registering new user
+2025-07-24 13:52:28,532 [main] INFO  org.example.ui.authCommands.ExitCommand - Closing database connection and exiting.
+2025-07-24 13:52:28,542 [main] INFO  org.example.dataBase.DatabaseManager - Closing database connection!

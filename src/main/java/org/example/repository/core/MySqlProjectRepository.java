@@ -1,5 +1,7 @@
 package org.example.repository.core;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.dataBase.DatabaseManager;
 import org.example.model.Project;
 
@@ -7,7 +9,7 @@ import java.sql.*;
 
 public class MySqlProjectRepository implements ProjectRepository {
     private final Connection conn = DatabaseManager.getInstance().getConnection();
-
+    private final Logger logger = LogManager.getLogger(MySqlProjectRepository.class);
 
     @Override
     public Project save(Project project) {
@@ -26,7 +28,7 @@ public class MySqlProjectRepository implements ProjectRepository {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Failed to save project: " + e.getMessage());
+            logger.error("Failed to save project: {}", e.getMessage());
         }
         return project;
     }
@@ -39,7 +41,7 @@ public class MySqlProjectRepository implements ProjectRepository {
             stmt.setInt(1, project.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Failed to delete project " + e.getMessage());
+            logger.error("Failed to delete project {}", e.getMessage());
         }
         return false;
     }
@@ -53,11 +55,11 @@ public class MySqlProjectRepository implements ProjectRepository {
             stmt.setInt(3, id);
             int rows = stmt.executeUpdate();
             if (rows == 0) {
-                System.err.println("Failed to update project");
+                logger.error("Failed to update project");
                 return null;
             }
         } catch (SQLException e) {
-            System.err.println("Failed to update project " + e.getMessage());
+            logger.error("Failed to update project {}", e.getMessage());
         }
         return project;
     }
@@ -78,7 +80,7 @@ public class MySqlProjectRepository implements ProjectRepository {
                 return project;
             }
         } catch (SQLException e) {
-            System.err.println("Failed to find project by name " + e.getMessage());
+            logger.error("Failed to find project by name {}", e.getMessage());
             return null;
         }
     }
@@ -98,7 +100,7 @@ public class MySqlProjectRepository implements ProjectRepository {
                 return project;
             }
         } catch (SQLException e) {
-            System.err.println("Failed to find project " + e.getMessage());
+            logger.error("Failed to find project by id{}", e.getMessage());
             return null;
         }
     }

@@ -1,5 +1,7 @@
 package org.example.repository.core;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.dataBase.DatabaseManager;
 import org.example.model.Status;
 import org.example.model.Task;
@@ -12,6 +14,7 @@ import java.util.List;
 public class MySqlTaskRepository implements TaskRepository {
 
     private final Connection conn = DatabaseManager.getInstance().getConnection();
+    private final Logger logger = LogManager.getLogger(MySqlTaskRepository.class);
 
     @Override
     public Task save(Task task) {
@@ -34,7 +37,7 @@ public class MySqlTaskRepository implements TaskRepository {
             }
             return task;
         } catch (SQLException e) {
-            System.err.println("Failed to save task: " + e.getMessage());
+            logger.error("Failed to save task: {}", e.getMessage());
             return null;
         }
     }
@@ -46,7 +49,7 @@ public class MySqlTaskRepository implements TaskRepository {
             stmt.setInt(1, task.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to delete task {}", e.getMessage());
             return false;
         }
     }
@@ -60,10 +63,10 @@ public class MySqlTaskRepository implements TaskRepository {
             statement.setInt(3, id);
             int rows = statement.executeUpdate();
             if (rows == 0) {
-                System.err.println("No rows updated");
+                logger.error("No rows updated");
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to update task {}", e.getMessage());
         }
         return task;
     }
@@ -88,7 +91,7 @@ public class MySqlTaskRepository implements TaskRepository {
                 return task;
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to find task by name {}", e.getMessage());
             return null;
         }
     }
@@ -114,7 +117,7 @@ public class MySqlTaskRepository implements TaskRepository {
                 return tasks;
             }
         } catch (SQLException e) {
-            System.err.println("Failed to get all tasks created by user " + e.getMessage());
+            logger.error("Failed to get all tasks created by user {}", e.getMessage());
             return null;
         }
     }
@@ -137,7 +140,7 @@ public class MySqlTaskRepository implements TaskRepository {
                 return task;
             }
         } catch (SQLException e) {
-            System.err.println("Failed to find user by id " + e.getMessage());
+            logger.error("Failed to find user by id {}", e.getMessage());
             return null;
         }
     }
@@ -155,7 +158,7 @@ public class MySqlTaskRepository implements TaskRepository {
             stmt.setInt(3, task_id);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("SQL error while changing task status: " + e.getMessage());
+            logger.error("SQL error while changing task status: {}", e.getMessage());
             return false;
         }
     }
@@ -182,7 +185,7 @@ public class MySqlTaskRepository implements TaskRepository {
             }
 
         } catch (SQLException e) {
-            System.err.println("Failed to find tasks by project id " + e.getMessage());
+            logger.error("Failed to find tasks by project id {}", e.getMessage());
             return null;
         }
     }
@@ -196,7 +199,7 @@ public class MySqlTaskRepository implements TaskRepository {
             stmt.setInt(2, taskId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("Failed to change project contains task: " + e.getMessage());
+            logger.error("Failed to change project contains task: {}", e.getMessage());
             return false;
         }
     }

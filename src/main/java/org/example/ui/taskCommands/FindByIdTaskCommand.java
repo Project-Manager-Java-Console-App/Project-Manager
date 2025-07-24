@@ -1,6 +1,8 @@
 package org.example.ui.taskCommands;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 import org.example.service.TaskService;
@@ -11,6 +13,7 @@ import java.util.Scanner;
 public class FindByIdTaskCommand implements Command {
     private final TaskService taskService;
     private final Scanner scanner;
+    private final Logger logger = LogManager.getLogger(FindByIdTaskCommand.class);
 
 
     public FindByIdTaskCommand(TaskService taskService, Scanner scanner) {
@@ -26,12 +29,12 @@ public class FindByIdTaskCommand implements Command {
         System.out.println("Enter task id: ");
         int id = scanner.nextInt();
         if (id == 0) {
-            throw new IllegalArgumentException("Task id is null");
+            logger.error("Task id is null");
         }
 
         Task task = taskService.findById(id);
         if (task == null) {
-            System.err.println("Task " + id + " not found");
+            logger.error("Task {}", id + " not found");
             return true;
         }
         SessionManager.getInstance().setCurrentTask(task);

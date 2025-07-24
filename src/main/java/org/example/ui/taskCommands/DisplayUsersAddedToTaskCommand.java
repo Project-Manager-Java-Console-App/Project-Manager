@@ -1,5 +1,7 @@
 package org.example.ui.taskCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 import org.example.service.TaskUserService;
@@ -9,6 +11,7 @@ import java.util.List;
 
 public class DisplayUsersAddedToTaskCommand implements Command {
     private final TaskUserService taskUserService;
+    private final Logger logger = LogManager.getLogger(DisplayUsersAddedToTaskCommand.class);
 
     public DisplayUsersAddedToTaskCommand(TaskUserService taskUserService) {
         this.taskUserService = taskUserService;
@@ -18,7 +21,7 @@ public class DisplayUsersAddedToTaskCommand implements Command {
     public boolean execute() {
         Task task = SessionManager.getInstance().getCurrentTask();
         if (task == null) {
-            System.err.println("Task is null");
+            logger.error("Task is null");
             return true;
         }
         System.out.println("Displaying users added to " + task.getName());

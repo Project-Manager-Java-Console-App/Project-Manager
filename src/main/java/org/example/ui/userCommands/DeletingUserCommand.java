@@ -1,5 +1,7 @@
 package org.example.ui.userCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
@@ -16,6 +18,7 @@ public class DeletingUserCommand implements Command {
     private final Scanner scanner;
     private final ProjectService projectService;
     private final ProjectUserService projectUserService;
+    private final Logger logger = LogManager.getLogger(DeletingUserCommand.class);
 
 
     public DeletingUserCommand(UserService userService, ProjectService projectService, ProjectUserService projectUserService, Scanner scanner) {
@@ -30,7 +33,7 @@ public class DeletingUserCommand implements Command {
         scanner.nextLine();
         Users users = SessionManager.getInstance().getCurrentUser();
         if (users == null) {
-            System.err.println("User not found");
+            logger.error("User not found");
             return true;
         }
         System.out.println("Deleting user");
@@ -38,7 +41,7 @@ public class DeletingUserCommand implements Command {
         String answer = scanner.nextLine();
         switch (answer) {
             case "" -> {
-                System.err.println("Answer is empty");
+                logger.error("Answer is empty");
                 return true;
             }
             case "Y" -> {
@@ -52,7 +55,7 @@ public class DeletingUserCommand implements Command {
 
                 boolean deleted = userService.deleteUser(users.getId());
                 if (!deleted) {
-                    System.err.println("Failed to delete user");
+                    logger.error("Failed to delete user");
                     return true;
                 } else {
                     SessionManager.getInstance().logout();

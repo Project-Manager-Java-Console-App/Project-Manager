@@ -11,7 +11,6 @@ public class LogOutCommand implements Command {
     @Override
     public boolean execute() {
         SessionManager.getInstance().logout();
-        System.out.println("Logged out successfully");
         logger.info("Logged out successfully");
         return true;
     }

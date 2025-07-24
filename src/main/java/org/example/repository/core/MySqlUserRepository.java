@@ -1,5 +1,7 @@
 package org.example.repository.core;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.dataBase.DatabaseManager;
 import org.example.model.Users;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,6 +11,7 @@ import java.sql.*;
 public class MySqlUserRepository implements UserRepository {
     private final Connection conn = DatabaseManager.getInstance().getConnection();
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final Logger logger = LogManager.getLogger(MySqlUserRepository.class);
 
 
     @Override
@@ -20,7 +23,8 @@ public class MySqlUserRepository implements UserRepository {
 
             int rowsAffected = ps.executeUpdate();
             if (rowsAffected == 0) {
-                throw new SQLException("Failed attempt for registration");
+                logger.error("Failed attempt for registration");
+                return null;
             }
             try (ResultSet keys = ps.getGeneratedKeys()) {
                 if (keys.next()) {
@@ -29,7 +33,7 @@ public class MySqlUserRepository implements UserRepository {
             }
             return user;
         } catch (SQLException e) {
-            System.err.println("Failed to save user");
+            logger.error("Failed to save user");
         }
         return null;
     }
@@ -41,7 +45,7 @@ public class MySqlUserRepository implements UserRepository {
             ps.setInt(1, user.getId());
             return ps.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to delete user {}", e.getMessage());
         }
         return false;
     }
@@ -55,10 +59,10 @@ public class MySqlUserRepository implements UserRepository {
             statement.setInt(2, id);
             int rows = statement.executeUpdate();
             if (rows == 0) {
-                System.err.println("Failed to update user");
+                logger.error("Failed to update user");
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to update user {}", e.getMessage());
         }
         return users;
     }
@@ -77,7 +81,7 @@ public class MySqlUserRepository implements UserRepository {
                 return u;
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to find user by name {}", e.getMessage());
         }
         return null;
     }
@@ -95,7 +99,7 @@ public class MySqlUserRepository implements UserRepository {
                 return u;
             }
         } catch (SQLException e) {
-            System.err.println(e.getMessage());
+            logger.error("Failed to find user by id {}", e.getMessage());
         }
         return null;
     }
@@ -123,7 +127,7 @@ public class MySqlUserRepository implements UserRepository {
                 }
             }
         } catch (SQLException e) {
-            System.err.println("Failed to authenticate");
+            logger.error("Failed to authenticate");
         }
         return null;
     }

@@ -1,5 +1,7 @@
 package org.example.ui.projectCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.service.ProjectService;
@@ -10,6 +12,7 @@ import java.util.Scanner;
 public class CreateProjectCommand implements Command {
     private final ProjectService projectService;
     private final Scanner scanner;
+    private final Logger logger = LogManager.getLogger(CreateProjectCommand.class);
 
     public CreateProjectCommand(ProjectService projectService, Scanner scanner) {
         this.projectService = projectService;
@@ -24,7 +27,7 @@ public class CreateProjectCommand implements Command {
         System.out.print("Enter project description: ");
         String projectDescription = scanner.nextLine();
         if (projectName.isEmpty() || projectDescription.isEmpty()) {
-            System.err.println("Project name or description is empty");
+            logger.error("Project name or description is empty");
             return true;
         }
 

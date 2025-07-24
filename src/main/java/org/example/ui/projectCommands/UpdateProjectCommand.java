@@ -1,5 +1,7 @@
 package org.example.ui.projectCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.service.ProjectService;
@@ -10,7 +12,7 @@ import java.util.Scanner;
 public class UpdateProjectCommand implements Command {
     private final ProjectService projectService;
     private final Scanner scanner;
-
+    private final Logger logger = LogManager.getLogger(UpdateProjectCommand.class);
 
     public UpdateProjectCommand(ProjectService projectService, Scanner scanner) {
         this.projectService = projectService;
@@ -25,12 +27,12 @@ public class UpdateProjectCommand implements Command {
         System.out.println("Enter new project description: ");
         String description = scanner.nextLine();
         if (name.isEmpty() || description.isEmpty()) {
-            System.err.println("Project name or description is required");
+            logger.error("Project name or description is required");
         }
 
         Project project = SessionManager.getInstance().getCurrentProject();
         if (project == null) {
-            System.err.println("No project found");
+            logger.error("No project found");
             return true;
         }
         Project projectUpdated = projectService.updateProject(name, description, project.getId());

@@ -1,5 +1,7 @@
 package org.example.ui.taskCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.SessionManager;
 import org.example.model.Status;
 import org.example.model.Task;
@@ -13,6 +15,7 @@ import static org.example.ui.globalMethods.GlobalMethods.enterStatus;
 public class UpdateTaskCommand implements Command {
     private final TaskService taskService;
     private final Scanner scanner;
+    private final Logger logger = LogManager.getLogger(UpdateTaskCommand.class);
 
 
     public UpdateTaskCommand(Scanner scanner, TaskService taskService) {
@@ -25,7 +28,7 @@ public class UpdateTaskCommand implements Command {
         scanner.nextLine();
         Task task = SessionManager.getInstance().getCurrentTask();
         if (task == null) {
-            System.err.println("Task not found");
+            logger.error("Task not found");
             return true;
         }
         System.out.println("Enter new name: ");
@@ -35,7 +38,7 @@ public class UpdateTaskCommand implements Command {
 
         Status newStatus = enterStatus(scanner);
         if (name.isEmpty() || description.isEmpty() || newStatus == null) {
-            System.err.println("Name and description are required");
+            logger.error("Name and description are required");
             return true;
         }
 

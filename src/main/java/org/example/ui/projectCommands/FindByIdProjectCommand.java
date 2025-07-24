@@ -1,5 +1,7 @@
 package org.example.ui.projectCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.service.ProjectService;
@@ -10,7 +12,7 @@ import java.util.Scanner;
 public class FindByIdProjectCommand implements Command {
     private final ProjectService projectService;
     private final Scanner scanner;
-
+    private final Logger logger = LogManager.getLogger(FindByIdProjectCommand.class);
 
     public FindByIdProjectCommand(ProjectService projectService, Scanner scanner) {
         this.projectService = projectService;
@@ -25,12 +27,12 @@ public class FindByIdProjectCommand implements Command {
         System.out.println("Enter Project ID");
         int id = scanner.nextInt();
         if (id == 0) {
-            System.err.println("Project ID is required");
+            logger.error("Project ID is required");
         }
 
         Project project = projectService.findById(id);
         if (project == null) {
-            System.err.println("Project not found");
+            logger.error("Project not found");
             return true;
         }
         SessionManager.getInstance().setCurrentProject(project);

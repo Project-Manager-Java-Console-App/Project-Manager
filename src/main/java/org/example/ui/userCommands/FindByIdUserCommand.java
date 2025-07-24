@@ -1,6 +1,8 @@
 package org.example.ui.userCommands;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Users;
 import org.example.service.UserService;
 import org.example.ui.Command;
@@ -10,6 +12,7 @@ import java.util.Scanner;
 public class FindByIdUserCommand implements Command {
     private final UserService userService;
     private final Scanner scanner;
+    private final Logger logger = LogManager.getLogger(FindByIdUserCommand.class);
 
     public FindByIdUserCommand(UserService userService, Scanner scanner) {
         this.userService = userService;
@@ -23,22 +26,17 @@ public class FindByIdUserCommand implements Command {
         System.out.println("Enter id: ");
         int id = scanner.nextInt();
         if (id == -1) {
-            System.err.println("id is null");
+            logger.error("id is null");
             return true;
         }
 
-        try {
-            Users user = userService.findById(id);
-            if (user == null) {
-                System.err.println("User not found");
-                return true;
-            }
-            System.out.println("User found");
-            System.out.println(user);
-        } catch (Exception e) {
-            System.err.println("User not found");
+        Users user = userService.findById(id);
+        if (user == null) {
+            logger.error("User not found");
             return true;
         }
+        System.out.println("User found");
+        System.out.println(user);
         return true;
     }
 }

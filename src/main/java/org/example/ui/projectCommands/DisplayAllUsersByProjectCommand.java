@@ -1,5 +1,7 @@
 package org.example.ui.projectCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.service.ProjectUserService;
@@ -9,7 +11,7 @@ import java.util.List;
 
 public class DisplayAllUsersByProjectCommand implements Command {
     private final ProjectUserService projectUserService;
-
+    private final Logger logger = LogManager.getLogger(DisplayAllUsersByProjectCommand.class);
 
     public DisplayAllUsersByProjectCommand(ProjectUserService projectUserService) {
         this.projectUserService = projectUserService;
@@ -20,7 +22,7 @@ public class DisplayAllUsersByProjectCommand implements Command {
     public boolean execute() {
         Project project = SessionManager.getInstance().getCurrentProject();
         if (project == null) {
-            System.err.println("Project is required");
+            logger.error("Project is required");
             return true;
         }
         System.out.println("Displaying all users assigned to project: " + project.getName());

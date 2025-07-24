@@ -1,6 +1,8 @@
 package org.example.ui.mainCommandBlocks;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.ui.AppContext;
 import org.example.ui.Command;
 import org.example.ui.authCommands.ExitCommand;
@@ -15,6 +17,7 @@ import java.util.Map;
 public class FuncCommands implements CommandProvider {
 
     private final Map<Integer, Command> commands = new HashMap<>();
+    private final Logger logger = LogManager.getLogger(FuncCommands.class);
 
     public FuncCommands(
             AppContext appContext) {
@@ -53,7 +56,7 @@ public class FuncCommands implements CommandProvider {
     @Override
     public Command getCommand(int choice) {
         return commands.getOrDefault(choice, () -> {
-            System.out.println("Invalid choice");
+            logger.error("Invalid choice");
             return false;
         });
     }

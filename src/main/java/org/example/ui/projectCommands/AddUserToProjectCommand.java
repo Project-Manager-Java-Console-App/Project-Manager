@@ -1,6 +1,8 @@
 package org.example.ui.projectCommands;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
@@ -14,6 +16,7 @@ public class AddUserToProjectCommand implements Command {
     private final ProjectUserService projectUserService;
     private final UserService userService;
     private final Scanner scanner;
+    private final Logger logger = LogManager.getLogger(AddUserToProjectCommand.class);
 
 
     public AddUserToProjectCommand(ProjectUserService projectUserService, UserService userService, Scanner scanner) {
@@ -27,26 +30,26 @@ public class AddUserToProjectCommand implements Command {
         scanner.nextLine();
         Project project = SessionManager.getInstance().getCurrentProject();
         if (project == null) {
-            System.err.println("Project not found");
+            logger.error("Project not found");
             return true;
         }
         System.out.println("Adding User to Project: " + project.getName());
         System.out.println("Enter username to add user to " + project.getName());
         String username = scanner.nextLine();
         if (username == null) {
-            System.err.println("Username is required");
+            logger.error("Username is required");
         }
 
         Users user = userService.findByName(username);
         if (user == null) {
-            System.err.println("User " + username + " Not Found");
+            logger.error("User {}", username + " Not Found");
             return true;
         }
         boolean added = projectUserService.addUserToProject(project.getId(), user.getId());
         if (added) {
             System.out.println("Added User to Project: " + project.getName());
         } else {
-            System.out.println("Failed to add User to Project: " + project.getName());
+            logger.error("Failed to add User to Project: {}", project.getName());
             return true;
         }
 

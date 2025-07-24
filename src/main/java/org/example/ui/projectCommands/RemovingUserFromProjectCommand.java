@@ -1,5 +1,7 @@
 package org.example.ui.projectCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Users;
@@ -13,7 +15,7 @@ public class RemovingUserFromProjectCommand implements Command {
     private final ProjectUserService projectUserService;
     private final UserService userService;
     private final Scanner scanner;
-
+    private final Logger logger = LogManager.getLogger(RemovingUserFromProjectCommand.class);
 
     public RemovingUserFromProjectCommand(ProjectUserService projectUserService, UserService userService, Scanner scanner) {
         this.projectUserService = projectUserService;
@@ -26,26 +28,24 @@ public class RemovingUserFromProjectCommand implements Command {
         scanner.nextLine();
         Project project = SessionManager.getInstance().getCurrentProject();
         if (project == null) {
-            System.err.println("Project is required");
+            logger.error("Project is required");
             return true;
         }
         System.out.println("Removing User From Project: " + project.getName());
         System.out.println("Enter username to remove");
         String username = scanner.nextLine();
         if (username.isEmpty()) {
-            System.err.println("Username is required");
+            logger.error("Username is required");
         }
         Users user = userService.findByName(username);
         if (user == null) {
-            System.err.println("Username " + username + " Not Found");
+            logger.error("Username {}", username + " Not Found");
             return true;
         }
         boolean remove = projectUserService.removeUserFromProject(project.getId(), user.getId());
         if (remove) {
             System.out.println("Removed " + username + " from Project: " + project.getName());
         }
-
-
         return true;
     }
 }

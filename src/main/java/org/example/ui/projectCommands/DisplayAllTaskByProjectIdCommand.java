@@ -1,6 +1,8 @@
 package org.example.ui.projectCommands;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.model.Task;
@@ -12,7 +14,7 @@ import java.util.List;
 public class DisplayAllTaskByProjectIdCommand implements Command {
 
     private final TaskService taskService;
-
+    private final Logger logger = LogManager.getLogger(DisplayAllTaskByProjectIdCommand.class);
 
     public DisplayAllTaskByProjectIdCommand(TaskService taskService) {
         this.taskService = taskService;
@@ -23,7 +25,7 @@ public class DisplayAllTaskByProjectIdCommand implements Command {
     public boolean execute() {
         Project project = SessionManager.getInstance().getCurrentProject();
         if (project == null) {
-            System.err.println("Project is required");
+            logger.error("Project is required");
             return true;
         }
         System.out.println("Displaying All Tasks from" + project.getName());

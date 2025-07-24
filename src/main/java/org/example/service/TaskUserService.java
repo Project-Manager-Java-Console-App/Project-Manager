@@ -4,7 +4,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.example.repository.auxiliary.TaskUserRepository;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class TaskUserService {
@@ -19,7 +18,6 @@ public class TaskUserService {
 
     public List<Integer> getUsersInTask(int taskId) {
         if (taskId < 1) {
-            System.err.println("Invalid task id");
             logger.error("Invalid task id! The id is smaller than 1");
             return null;
         }
@@ -29,7 +27,6 @@ public class TaskUserService {
 
     public boolean removeUserFromTask(int taskId, int userId) {
         if (taskId < 1 || userId < 1) {
-            System.err.println("Invalid ids");
             logger.error("Invalid ids! The one of ids is smaller than 1 ", taskId, userId);
             return false;
         }
@@ -37,9 +34,8 @@ public class TaskUserService {
         return taskUserRepository.delete(taskId, userId);
     }
 
-    public boolean addUserToTask(int taskId, int userId) throws SQLException {
+    public boolean addUserToTask(int taskId, int userId) {
         if (taskId < 1 || userId < 1) {
-            System.err.println("Invalid ids");
             logger.error("Invalid ids! The id is smaller than 1 ", taskId, userId);
             return false;
         }
@@ -49,7 +45,6 @@ public class TaskUserService {
 
     public List<Integer> getAllTaskAssignedToUser(int userId) {
         if (userId < 1) {
-            System.err.println("Invalid user id");
             logger.error("Invalid user id! The id is smaller than 1", userId);
             return null;
         }

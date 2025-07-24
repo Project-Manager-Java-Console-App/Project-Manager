@@ -22,8 +22,7 @@ public class ProjectService {
 
     public Project createProject(String name, String description, int createdByUserId) {
         if (name == null || description == null || createdByUserId == 0) {
-            System.err.println("Name, description, createdByUserId is null!");
-            logger.error("Project name and description are null!", name, description, createdByUserId);
+            logger.error("Project name and description are null!");
             return null;
         }
         logger.info("Creating project");
@@ -32,8 +31,7 @@ public class ProjectService {
 
     public Project updateProject(String name, String description, int projectId) {
         if (name == null || description == null || projectId == 0) {
-            System.err.println("Name, description, projectId are required");
-            logger.error("Project name and description are required!", name, description, projectId);
+            logger.error("Project name and description are required!");
             return null;
         }
         logger.info("Updating project");
@@ -43,13 +41,11 @@ public class ProjectService {
 
     public Project findProjectByName(String name) {
         if (name == null || name.isEmpty()) {
-            System.err.println("Name is required");
             logger.error("Name is required. The project name is null or empty!");
             return null;
         }
         Project project = projectRepository.findByName(name);
         if (project == null) {
-            System.err.println("Project with name " + name + " does not exist");
             logger.error("Failed to find Project by name");
             return null;
         }
@@ -59,13 +55,11 @@ public class ProjectService {
 
     public Project findById(int id) {
         if (id == 0) {
-            System.err.println("Id is required");
             logger.error("Id is required. The project id is null or empty!");
             return null;
         }
         Project project = projectRepository.findById(id);
         if (project == null) {
-            System.err.println("Project with id " + id + " does not exist");
             logger.error("Failed to find Project by id");
             return null;
         }
@@ -75,7 +69,6 @@ public class ProjectService {
 
     public boolean deleteProject(Project project) {
         if (project == null) {
-            System.err.println("Project is required");
             logger.error("Project is required. The project is null or empty!");
             return false;
         }
@@ -85,13 +78,11 @@ public class ProjectService {
 
     public void addTaskToProject(int projectId, Integer taskId) {
         if (projectId == 0 || taskId == 0) {
-            System.err.println("ProjectId and taskId is required");
             logger.error("ProjectId and taskId is required. The project id is null or empty!");
             return;
         }
         boolean added = taskRepository.assignTaskToProject(projectId, taskId);
         if (!added) {
-            System.err.println("Unable to assign task to project");
             logger.error("Unable to assign task to project");
             return;
         }

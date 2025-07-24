@@ -1,5 +1,7 @@
 package org.example.ui.taskCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.*;
 import org.example.service.TaskService;
 import org.example.ui.Command;
@@ -10,7 +12,7 @@ import java.util.Scanner;
 public class CreateTaskInProjectCommand implements Command {
     private final TaskService taskService;
     private final Scanner scanner;
-
+    private final Logger logger = LogManager.getLogger(CreateTaskInProjectCommand.class);
 
     public CreateTaskInProjectCommand(TaskService taskService, Scanner scanner) {
         this.taskService = taskService;
@@ -22,7 +24,7 @@ public class CreateTaskInProjectCommand implements Command {
         scanner.nextLine();
         Project project = SessionManager.getInstance().getCurrentProject();
         if (project == null) {
-            System.err.println("Project not found");
+            logger.error("Project not found");
             return true;
         }
         Users user = SessionManager.getInstance().getCurrentUser();
@@ -36,13 +38,13 @@ public class CreateTaskInProjectCommand implements Command {
         System.out.println("Please enter description: ");
         String description = scanner.nextLine();
         if (name.isEmpty() || description.isEmpty()) {
-            System.err.println("Name and description are required");
+            logger.error("Name and description are required");
             return true;
         }
 
         Task task = taskService.createTask(name, project.getId(), description, Status.IN_PROGRESS, LocalDate.now(), user.getId());
         if (task == null) {
-            System.err.println("Failed to create task " + project.getName() + " in " + user.getName());
+            logger.error("Failed to create task " + project.getName() + " in " + user.getName());
             return true;
         }
         SessionManager.getInstance().setCurrentTask(task);

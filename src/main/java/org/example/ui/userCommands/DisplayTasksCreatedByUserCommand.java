@@ -1,5 +1,7 @@
 package org.example.ui.userCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.SessionManager;
 import org.example.model.Task;
 import org.example.model.Users;
@@ -10,6 +12,7 @@ import java.util.List;
 
 public class DisplayTasksCreatedByUserCommand implements Command {
     private final TaskService taskService;
+    private final Logger logger = LogManager.getLogger(DisplayTasksCreatedByUserCommand.class);
 
     public DisplayTasksCreatedByUserCommand(TaskService taskService) {
         this.taskService = taskService;
@@ -19,7 +22,7 @@ public class DisplayTasksCreatedByUserCommand implements Command {
     public boolean execute() {
         Users user = SessionManager.getInstance().getCurrentUser();
         if (user == null) {
-            System.err.println("User is empty");
+            logger.error("User is empty");
             return true;
         }
         System.out.println("Displaying tasks created by " + user.getName());

@@ -1,6 +1,8 @@
 package org.example.repository.auxiliary;
 
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.dataBase.DatabaseManager;
 
 import java.sql.Connection;
@@ -16,6 +18,7 @@ import static org.example.repository.auxiliary.MySqlProjectUserRepository.getInt
 
 public class MySqlTaskUserRepository implements TaskUserRepository {
     private final Connection conn = DatabaseManager.getInstance().getConnection();
+    private final Logger logger = LogManager.getLogger(MySqlTaskUserRepository.class);
 
 
     @Override
@@ -24,7 +27,7 @@ public class MySqlTaskUserRepository implements TaskUserRepository {
         try (PreparedStatement stmt = conn.prepareStatement(query)) {
             return getIntegers(taskId, stmt);
         } catch (SQLException e) {
-            System.err.println("Failed to get added users to task" + e.getMessage());
+            logger.error("Failed to get added users to task {}", e.getMessage());
             return null;
         }
     }
@@ -37,7 +40,7 @@ public class MySqlTaskUserRepository implements TaskUserRepository {
             stmt.setInt(2, userId);
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("SQL error while deleting user to task: " + e.getMessage());
+            logger.error("SQL error while deleting user to task: {}", e.getMessage());
         }
         return false;
     }
@@ -51,7 +54,7 @@ public class MySqlTaskUserRepository implements TaskUserRepository {
             stmt.setObject(3, LocalDate.now());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
-            System.err.println("SQL error while assigning user to task: " + e.getMessage());
+            logger.error("SQL error while assigning user to task: {}", e.getMessage());
         }
         return false;
     }
@@ -70,7 +73,7 @@ public class MySqlTaskUserRepository implements TaskUserRepository {
                 return ids;
             }
         } catch (SQLException e) {
-            System.err.println("Sql error while getting tasks added by user: " + e.getMessage());
+            logger.error("Sql error while getting tasks added by user: {}", e.getMessage());
             return null;
         }
     }

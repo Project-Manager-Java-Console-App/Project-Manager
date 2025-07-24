@@ -27,13 +27,13 @@ public class ChangeTaskStatusCommand implements Command {
         scanner.nextLine();
         Task task = SessionManager.getInstance().getCurrentTask();
         if (task == null) {
-            System.err.println("Task is required");
+            logger.error("Task is required");
             return true;
         }
         System.out.println("Change task status of " + task.getName());
         Status newStatus = enterStatus(scanner);
         if (newStatus == null) {
-            System.err.println("Status is required");
+            logger.error("Status is required");
         }
         boolean changedStatus = taskService.changeStatus(task.getId(), newStatus);
         if (!changedStatus) {

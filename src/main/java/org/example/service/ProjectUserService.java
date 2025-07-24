@@ -18,7 +18,6 @@ public class ProjectUserService {
 
     public List<Integer> getUsersAssignedToProject(Integer projectId) {
         if (projectId == null) {
-            System.err.println("Invalid Project ID");
             logger.error("Invalid Project ID. Project id is null");
             return null;
         }
@@ -28,8 +27,7 @@ public class ProjectUserService {
 
     public boolean removeUserFromProject(Integer projectId, Integer userId) {
         if (projectId == null || userId == null) {
-            System.err.println("Invalid IDs");
-            logger.error("Invalid IDs, One of the IDs is null", projectId, userId);
+            logger.error("Invalid IDs, One of the IDs is null");
             return false;
         }
         logger.info("Removing User From Project");
@@ -38,7 +36,6 @@ public class ProjectUserService {
 
     public boolean addUserToProject(Integer projectId, Integer userId) {
         if (projectId == null || userId == null) {
-            System.err.println("Invalid IDs");
             logger.error("Invalid IDs", projectId, userId);
             return false;
         }
@@ -48,7 +45,6 @@ public class ProjectUserService {
 
     public List<Project> getAllProjectsCreatedByUser(Integer userId) {
         if (userId == null) {
-            System.err.println("Invalid User ID");
             logger.error("Invalid User ID. User id is null. Create by function!");
             return null;
         }
@@ -58,7 +54,6 @@ public class ProjectUserService {
 
     public List<Integer> getAllProjectsWhereUserIsAdded(Integer userId) {
         if (userId == null) {
-            System.err.println("Invalid User ID");
             logger.error("Invalid User ID. User id is null. Added in function!");
             return null;
         }

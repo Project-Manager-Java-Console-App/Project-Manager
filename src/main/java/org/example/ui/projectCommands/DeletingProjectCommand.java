@@ -1,5 +1,7 @@
 package org.example.ui.projectCommands;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.example.model.Project;
 import org.example.model.SessionManager;
 import org.example.service.ProjectService;
@@ -10,6 +12,7 @@ import java.util.Scanner;
 public class DeletingProjectCommand implements Command {
     private final ProjectService projectService;
     private final Scanner scanner;
+    private final Logger logger = LogManager.getLogger(DeletingProjectCommand.class);
 
     public DeletingProjectCommand(ProjectService projectService, Scanner scanner) {
         this.projectService = projectService;
@@ -21,7 +24,7 @@ public class DeletingProjectCommand implements Command {
         scanner.nextLine();
         Project project = SessionManager.getInstance().getCurrentProject();
         if (project == null) {
-            System.err.println("Project is required");
+            logger.error("Project is required");
             return true;
         }
         System.out.println("Are you sure you want to delete the project " + project.getName() + "(Y/N)");
@@ -30,14 +33,14 @@ public class DeletingProjectCommand implements Command {
         if (answer.equals("Y")) {
             boolean deleted = projectService.deleteProject(project);
             if (!deleted) {
-                System.out.println("Failed to delete " + project.getName());
+                logger.error("Failed to delete {}", project.getName());
             }
             System.out.println("Project deleted successfully");
             SessionManager.getInstance().setCurrentProject(null);
         } else if (answer.equals("N")) {
             System.out.println("Project " + project.getName() + "is not deleted");
         } else {
-            System.err.println("Invalid answer entered");
+            logger.error("Invalid answer entered");
         }
         return true;
     }
